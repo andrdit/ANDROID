@@ -1,3 +1,22 @@
 <resources>
     <string name="app_name">Calculator</string>
+    <string name="textBtn1">1</string>
+    <string name="textBtn2">2</string>
+    <string name="textBtn3">3</string>
+    <string name="textBtn4">4</string>
+    <string name="textBtn5">5</string>
+    <string name="textBtn7">7</string>
+    <string name="textBtn8">8</string>
+    <string name="textBtn9">9</string>
+    <string name="textBtn6">6</string>
+    <string name="textBtn0">0</string>
+    <string name="textBtnPt">.</string>
+    <string name="textBtnClear">c</string>
+    <string name="textBtnBackSpace"><![CDATA[<-]]></string>
+    <string name="textBtnProcents">%</string>
+    <string name="textBtnDivide">/</string>
+    <string name="textBtnMultiply">*</string>
+    <string name="textBtnMinus">-</string>
+    <string name="textBtnPlus">+</string>
+    <string name="textBtnEquel">=</string>
 </resources>
