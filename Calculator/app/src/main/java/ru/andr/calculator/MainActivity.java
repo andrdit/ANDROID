@@ -4,7 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.widget.Button;
-import android.widget.Spinner;
+import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -28,10 +28,27 @@ public class MainActivity extends AppCompatActivity {
     private Button mBtnEquel;
     private Button mBtnPt;
 
+    private TextView mTextViewResult;
+    private TextView mTextViewExample;
+
+    private StringBuilder mCurrentTextResult;
+    private StringBuilder mExample;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.key_board_layout);
+
+        mCurrentTextResult = new StringBuilder();
+        mCurrentTextResult.append("");
+
+        mExample = new StringBuilder();
+        mExample.append("");
+
+        init();
+    }
+
+    private void init() {
 
         mBtn0 = (Button) findViewById(R.id.button0);
         mBtn1 = (Button) findViewById(R.id.button1);
@@ -52,5 +69,175 @@ public class MainActivity extends AppCompatActivity {
         mBtnPlus = (Button) findViewById(R.id.buttonPlus);
         mBtnEquel = (Button) findViewById(R.id.buttonEquel);
         mBtnPt = (Button) findViewById(R.id.buttonPt);
+
+        mTextViewResult = (TextView) findViewById(R.id.textViewResult);
+        mTextViewExample = (TextView) findViewById(R.id.textViewExample);
+
+        mBtnClear.setOnClickListener(view -> {
+            mCurrentTextResult.setLength(0);
+            mCurrentTextResult.append("");
+            mTextViewResult.setText("");
+
+            mExample.setLength(0);
+            mExample.append("");
+            mTextViewExample.setText("");
+        });
+
+        mBtn0.setOnClickListener(view -> {
+            if(mCurrentTextResult.length() == 0){
+                return;
+            }
+
+            mCurrentTextResult.append("0");
+            mTextViewResult.setText(mCurrentTextResult.toString());
+        });
+
+        mBtn1.setOnClickListener(view -> {
+            mCurrentTextResult.append("1");
+            mTextViewResult.setText(mCurrentTextResult.toString());
+        });
+
+        mBtn2.setOnClickListener(view -> {
+            mCurrentTextResult.append("2");;
+            mTextViewResult.setText(mCurrentTextResult.toString());
+        });
+
+        mBtn3.setOnClickListener(view -> {
+            mCurrentTextResult.append("3");
+            mTextViewResult.setText(mCurrentTextResult.toString());
+        });
+
+        mBtn4.setOnClickListener(view -> {
+            mCurrentTextResult.append("4");
+            mTextViewResult.setText(mCurrentTextResult.toString());
+        });
+
+        mBtn5.setOnClickListener(view -> {
+            mCurrentTextResult.append("5");
+            mTextViewResult.setText(mCurrentTextResult.toString());
+        });
+
+        mBtn6.setOnClickListener(view -> {
+            mCurrentTextResult.append("6");
+            mTextViewResult.setText(mCurrentTextResult.toString());
+        });
+
+        mBtn7.setOnClickListener(view -> {
+            mCurrentTextResult.append("7");
+            mTextViewResult.setText(mCurrentTextResult.toString());
+        });
+
+        mBtn8.setOnClickListener(view -> {
+            mCurrentTextResult.append("8");
+            mTextViewResult.setText(mCurrentTextResult.toString());
+        });
+
+        mBtn9.setOnClickListener(view -> {
+            mCurrentTextResult.append("9");
+            mTextViewResult.setText(mCurrentTextResult.toString());
+        });
+
+        mBtnBackSpace.setOnClickListener(view -> {
+            if(mCurrentTextResult.length() == 0)
+                return;
+            mCurrentTextResult.deleteCharAt(mCurrentTextResult.length() - 1);
+            mTextViewResult.setText(mCurrentTextResult.toString());
+        });
+
+        mBtnPt.setOnClickListener(view -> {
+
+            if(mCurrentTextResult.toString().contains("."))
+                return;
+            if(mCurrentTextResult.length() == 0){
+                mCurrentTextResult.append("0");
+            }
+
+            if(isLastSymbolOperand())
+                return;
+
+            mCurrentTextResult.append(".");
+            mTextViewResult.setText(mCurrentTextResult.toString());
+        });
+
+        mBtnProcents.setOnClickListener(view -> {
+            if(mCurrentTextResult.length() == 0)
+                return;
+
+            if(isLastSymbolOperand())
+                return;
+
+            setTextExamle('/');
+
+        });
+
+        mBtnDivide.setOnClickListener(view -> {
+            if(mCurrentTextResult.length() == 0)
+                return;
+
+            if(isLastSymbolOperand())
+                return;
+
+            setTextExamle('/');
+        });
+
+        mBtnMultiply.setOnClickListener(view -> {
+            if(mCurrentTextResult.length() == 0)
+                return;
+
+            if(isLastSymbolOperand())
+                return;
+
+            setTextExamle('*');
+
+        });
+
+        mBtnMinus.setOnClickListener(view -> {
+            if(mCurrentTextResult.length() == 0)
+                return;
+
+            if(isLastSymbolOperand())
+                return;
+
+            setTextExamle('-');
+
+        });
+
+        mBtnPlus.setOnClickListener(view -> {
+            if(mCurrentTextResult.length() == 0)
+                return;
+
+            if(isLastSymbolOperand())
+                return;
+
+            setTextExamle('+');
+
+        });
+
+        mBtnEquel.setOnClickListener(view -> {
+            if(mCurrentTextResult.length() == 0)
+                return;
+
+            if(isLastSymbolOperand())
+                return;
+            mCurrentTextResult.append("=");
+            mTextViewResult.setText(mCurrentTextResult.toString());
+        });
+
+    }
+
+    private void setTextExamle(char operand) {
+        mExample.append(mCurrentTextResult.toString());
+        mExample.append(operand);
+        mTextViewExample.setText(mExample.toString());
+        mCurrentTextResult.setLength(0);
+        mCurrentTextResult.append("");
+        mTextViewResult.setText("");
+    }
+
+    private boolean isLastSymbolOperand(){
+        char lastSymbol = mCurrentTextResult.charAt(mCurrentTextResult.length() - 1);
+        if(lastSymbol == '%' || lastSymbol == '.' || lastSymbol == '/' || lastSymbol == '*' || lastSymbol == '-' || lastSymbol == '+')
+            return true;
+        return false;
     }
 }
