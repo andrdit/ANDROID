@@ -3,8 +3,12 @@ package ru.andr.calculator;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
+
+import java.util.ArrayList;
+import java.util.Stack;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -33,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
 
     private StringBuilder mCurrentTextResult;
     private StringBuilder mExample;
+    private ArrayList<String> mExampleArrayList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +49,8 @@ public class MainActivity extends AppCompatActivity {
 
         mExample = new StringBuilder();
         mExample.append("");
+
+        mExampleArrayList = new ArrayList<>();
 
         init();
     }
@@ -81,6 +88,8 @@ public class MainActivity extends AppCompatActivity {
             mExample.setLength(0);
             mExample.append("");
             mTextViewExample.setText("");
+
+            mExampleArrayList.clear();
         });
 
         mBtn0.setOnClickListener(view -> {
@@ -223,12 +232,60 @@ public class MainActivity extends AppCompatActivity {
 
             setTextExamle("");
 
-            CustomStack customStack = new CustomStack(mTextViewExample.getText().length());
+            // get postfix string
+            CustomStack customStack = new CustomStack(mExampleArrayList.size());
 
-            String postfixString = infixToPostfix(mTextViewExample.getText().toString(), customStack);
+            String postfixString = infixToPostfix(customStack);
+            mTextViewResult.setText(postfixString);
+
+            //get result
+            String[] operandWithOperators = postfixString.split(";");
 
             mTextViewResult.setText(postfixString);
 
+            Stack<String> resultStack = new Stack<>();
+
+            String element;
+            String operand1;
+            String operand2;
+            String answer = "";
+
+            float num1;
+            float num2;
+
+            for (int i = 0; i < operandWithOperators.length; i++) {
+
+                element = operandWithOperators[i];
+
+                if (!element.equals("%") && !element.equals("/") && !element.equals("*") && !element.equals("-") && !element.equals("+")) {
+                    resultStack.push(element);
+                } else // Если это оператор
+                {
+                    operand2 = resultStack.pop(); // Извлечение операндов
+                    operand1 = resultStack.pop();
+
+                    switch (element) // Выполнение арифметической
+                    { // операции
+                        case "+":
+                            answer = getSum(operand1, operand2);
+                            break;
+                        case "-":
+                            answer = getMinus(operand1, operand2);
+                            break;
+                        case "*":
+                            answer = getMultiply(operand1, operand2);
+                            break;
+                        case "/":
+                            answer = getDivide(operand1, operand2);
+                            break;
+                        default:
+                             answer = "0";
+                    }
+                       resultStack.push(answer); // Занесение промежуточного
+                }
+            }
+               answer = resultStack.pop();
+               mTextViewResult.setText(answer);
 
         });
 
@@ -237,6 +294,11 @@ public class MainActivity extends AppCompatActivity {
     private void setTextExamle(String operand) {
         mExample.append(mCurrentTextResult.toString());
         mExample.append(operand);
+
+        mExampleArrayList.add(mCurrentTextResult.toString());
+        if(!operand.equals(""))
+        mExampleArrayList.add(operand);
+
         mTextViewExample.setText(mExample.toString());
         mCurrentTextResult.setLength(0);
         mCurrentTextResult.append("");
@@ -250,36 +312,37 @@ public class MainActivity extends AppCompatActivity {
         return false;
     }
 
-    private String infixToPostfix(String infixString, CustomStack customStack){ // Преобразование в постфиксную форму
+    private String infixToPostfix(CustomStack customStack) { // Преобразование в постфиксную форму
 
         StringBuilder sbString = new StringBuilder();
         int nextIndex = 0;
 
-        for (int j = 0; j < infixString.length(); j++) {
-            char ch = infixString.charAt(j);
+        for (int j = 0; j < mExampleArrayList.size(); j++) {
+
+            String ch = mExampleArrayList.get(j);
 
             switch (ch) {
-                case '+': // + или -
-                case '-':
+                case "+": // + или -
+                case "-":
                     getOperator(ch, 1, sbString, customStack); // Извлечение операторов
                     break; // (приоритет 1)
-                case '*': // * или /
-                case '/':
+                case "*": // * или /
+                case "/":
                     getOperator(ch, 2, sbString, customStack); // Извлечение операторов
                     break; // (приоритет 2)
-                case '.':
+                case ".":
                     sbString.append(ch); // Записать в выходную строку
                     break;
                 default: // Остается операнд
                     nextIndex = j + 1;
-                    if(nextIndex == infixString.length()) {
+                    if (nextIndex == mExampleArrayList.size()) {
                         sbString.append(ch + ";"); // Записать в выходную строку
                         break;
                     }
 
-                    if(infixString.charAt(nextIndex) == '.') {
+                    if (mExampleArrayList.get(nextIndex) == ".") {
                         sbString.append(ch); // Записать в выходную строку
-                    }else {
+                    } else {
                         sbString.append(ch + ";"); // Записать в выходную строку
                     }
                     nextIndex = 0;
@@ -289,27 +352,70 @@ public class MainActivity extends AppCompatActivity {
 
         while (!customStack.isEmpty()) // Извлечение оставшихся операторов
         {
+          //  String as = customStack.pop();
+
             sbString.append(customStack.pop() + ";"); // Записать в выходную строку
+          //  sbString.append(";"); // Записать в выходную строку
         }
 
         return sbString.toString(); // Возвращение постфиксного выражения
     }
 
-    private void getOperator(char opThis, int prec1, StringBuilder sbString, CustomStack customStack) { // Чтение оператора из входной строки
+    private void getOperator(String opThis, int prec1, StringBuilder sbString, CustomStack customStack) { // Чтение оператора из входной строки
         while (!customStack.isEmpty()) {
-            char opTop = customStack.pop();
-                int prec2; // Приоритет нового оператора
-                if (opTop == '+' || opTop == '-') // Определение приоритета
-                    prec2 = 1;
-                else
-                    prec2 = 2;
-                if (prec2 < prec1) // Если приоритет нового оператора
-                { // меньше приоритета старого
-                    customStack.push(opTop); // Сохранить новый оператор
-                    break;
-                } else // Приоритет нового оператора
-                    sbString.append(opTop); // не меньше приоритета старого
+            String opTop = (String) customStack.pop();
+            int prec2; // Приоритет нового оператора
+            if (opTop == "+" || opTop == "-") // Определение приоритета
+                prec2 = 1;
+            else
+                prec2 = 2;
+            if (prec2 < prec1) // Если приоритет нового оператора
+            { // меньше приоритета старого
+                customStack.push(opTop); // Сохранить новый оператор
+                break;
+            } else // Приоритет нового оператора
+                sbString.append(opTop + ";"); // не меньше приоритета старого
         }
         customStack.push(opThis); // Занесение в стек нового оператора
+    }
+
+    private Object parseToNumber(String num) {
+        if (num.contains(".")) {
+            return Float.parseFloat(num);
+        } else {
+            return Integer.parseInt(num);
+        }
+    }
+
+    private String getSum(String num1, String num2) {
+        if (!num1.contains(".") && !num2.contains(".")) {
+            return Integer.toString(Integer.parseInt(num1) + Integer.parseInt(num2));
+        }else{
+            return Float.toString(Float.parseFloat(num1) + Float.parseFloat(num2));
+        }
+    }
+
+    private String getMinus(String num1, String num2) {
+        if (!num1.contains(".") && !num2.contains(".")) {
+            return Integer.toString(Integer.parseInt(num1) - Integer.parseInt(num2));
+        }else{
+            return Float.toString(Float.parseFloat(num1) - Float.parseFloat(num2));
+        }
+    }
+
+    private String getMultiply(String num1, String num2) {
+        if (!num1.contains(".") && !num2.contains(".")) {
+            return Integer.toString(Integer.parseInt(num1) * Integer.parseInt(num2));
+        }else{
+            return Float.toString(Float.parseFloat(num1) * Float.parseFloat(num2));
+        }
+    }
+
+    private String getDivide(String num1, String num2) {
+//        if (!num1.contains(".") && !num2.contains(".")) {
+//            return Integer.toString(Integer.parseInt(num1) / Integer.parseInt(num2));
+//        }else{
+            return Float.toString(Float.parseFloat(num1) / Float.parseFloat(num2));
+//        }
     }
 }

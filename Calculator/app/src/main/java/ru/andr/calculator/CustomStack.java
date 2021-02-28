@@ -2,31 +2,31 @@ package ru.andr.calculator;
 
 public class CustomStack {
     private int maxSize;
-    private char[] stackArray;
+    private String[] stackArray;
     private int top;
 
     //--------------------------------------------------------------
     public CustomStack(int s)
     {
         maxSize = s;
-        stackArray = new char[maxSize];
+        stackArray = new String[maxSize];
         top = -1;
     }
 
     //--------------------------------------------------------------
-    public void push(char j) // Размещение элемента на вершине стека
+    public void push(String j) // Размещение элемента на вершине стека
     {
         stackArray[++top] = j;
     }
 
     //--------------------------------------------------------------
-    public char pop() // Извлечение элемента с вершины стека
+    public String pop() // Извлечение элемента с вершины стека
     {
         return stackArray[top--];
     }
 
     //--------------------------------------------------------------
-    public char peek() // Чтение элемента с вершины стека
+    public String peek() // Чтение элемента с вершины стека
     {
         return stackArray[top];
     }
@@ -44,7 +44,7 @@ public class CustomStack {
     }
 
     //--------------------------------------------------------------
-    public char peekN(int n) // Чтение элемента с индексом n
+    public String peekN(int n) // Чтение элемента с индексом n
     {
         return stackArray[n];
     }
