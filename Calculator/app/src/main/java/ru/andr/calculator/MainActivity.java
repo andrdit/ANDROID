@@ -253,6 +253,8 @@ public class MainActivity extends AppCompatActivity {
     private String infixToPostfix(String infixString, CustomStack customStack){ // Преобразование в постфиксную форму
 
         StringBuilder sbString = new StringBuilder();
+        int nextIndex = 0;
+
         for (int j = 0; j < infixString.length(); j++) {
             char ch = infixString.charAt(j);
 
@@ -265,15 +267,29 @@ public class MainActivity extends AppCompatActivity {
                 case '/':
                     getOperator(ch, 2, sbString, customStack); // Извлечение операторов
                     break; // (приоритет 2)
-                default: // Остается операнд
+                case '.':
                     sbString.append(ch); // Записать в выходную строку
+                    break;
+                default: // Остается операнд
+                    nextIndex = j + 1;
+                    if(nextIndex == infixString.length()) {
+                        sbString.append(ch + ";"); // Записать в выходную строку
+                        break;
+                    }
+
+                    if(infixString.charAt(nextIndex) == '.') {
+                        sbString.append(ch); // Записать в выходную строку
+                    }else {
+                        sbString.append(ch + ";"); // Записать в выходную строку
+                    }
+                    nextIndex = 0;
                     break;
             }
         }
 
         while (!customStack.isEmpty()) // Извлечение оставшихся операторов
         {
-            sbString.append(customStack.pop()); // Записать в выходную строку
+            sbString.append(customStack.pop() + ";"); // Записать в выходную строку
         }
 
         return sbString.toString(); // Возвращение постфиксного выражения
