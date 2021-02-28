@@ -84,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         mBtn0.setOnClickListener(view -> {
-            if(mCurrentTextResult.length() == 0){
+            if (mCurrentTextResult.length() == 0) {
                 return;
             }
 
@@ -98,7 +98,8 @@ public class MainActivity extends AppCompatActivity {
         });
 
         mBtn2.setOnClickListener(view -> {
-            mCurrentTextResult.append("2");;
+            mCurrentTextResult.append("2");
+            ;
             mTextViewResult.setText(mCurrentTextResult.toString());
         });
 
@@ -138,7 +139,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         mBtnBackSpace.setOnClickListener(view -> {
-            if(mCurrentTextResult.length() == 0)
+            if (mCurrentTextResult.length() == 0)
                 return;
             mCurrentTextResult.deleteCharAt(mCurrentTextResult.length() - 1);
             mTextViewResult.setText(mCurrentTextResult.toString());
@@ -146,13 +147,13 @@ public class MainActivity extends AppCompatActivity {
 
         mBtnPt.setOnClickListener(view -> {
 
-            if(mCurrentTextResult.toString().contains("."))
+            if (mCurrentTextResult.toString().contains("."))
                 return;
-            if(mCurrentTextResult.length() == 0){
+            if (mCurrentTextResult.length() == 0) {
                 mCurrentTextResult.append("0");
             }
 
-            if(isLastSymbolOperand())
+            if (isLastSymbolOperand())
                 return;
 
             mCurrentTextResult.append(".");
@@ -160,72 +161,80 @@ public class MainActivity extends AppCompatActivity {
         });
 
         mBtnProcents.setOnClickListener(view -> {
-            if(mCurrentTextResult.length() == 0)
+            if (mCurrentTextResult.length() == 0)
                 return;
 
-            if(isLastSymbolOperand())
+            if (isLastSymbolOperand())
                 return;
 
-            setTextExamle('/');
+            setTextExamle("/");
 
         });
 
         mBtnDivide.setOnClickListener(view -> {
-            if(mCurrentTextResult.length() == 0)
+            if (mCurrentTextResult.length() == 0)
                 return;
 
-            if(isLastSymbolOperand())
+            if (isLastSymbolOperand())
                 return;
 
-            setTextExamle('/');
+            setTextExamle("/");
         });
 
         mBtnMultiply.setOnClickListener(view -> {
-            if(mCurrentTextResult.length() == 0)
+            if (mCurrentTextResult.length() == 0)
                 return;
 
-            if(isLastSymbolOperand())
+            if (isLastSymbolOperand())
                 return;
 
-            setTextExamle('*');
+            setTextExamle("*");
 
         });
 
         mBtnMinus.setOnClickListener(view -> {
-            if(mCurrentTextResult.length() == 0)
+            if (mCurrentTextResult.length() == 0)
                 return;
 
-            if(isLastSymbolOperand())
+            if (isLastSymbolOperand())
                 return;
 
-            setTextExamle('-');
+            setTextExamle("-");
 
         });
 
         mBtnPlus.setOnClickListener(view -> {
-            if(mCurrentTextResult.length() == 0)
+            if (mCurrentTextResult.length() == 0)
                 return;
 
-            if(isLastSymbolOperand())
+            if (isLastSymbolOperand())
                 return;
 
-            setTextExamle('+');
+            setTextExamle("+");
 
         });
 
         mBtnEquel.setOnClickListener(view -> {
-            if(mCurrentTextResult.length() == 0)
+            if (mCurrentTextResult.length() == 0)
                 return;
 
-            if(isLastSymbolOperand())
+            if (isLastSymbolOperand())
                 return;
-            mCurrentTextResult.append("=");
-            mTextViewResult.setText(mCurrentTextResult.toString());
+
+            setTextExamle("");
+
+            CustomStack customStack = new CustomStack(mTextViewExample.getText().length());
+
+            String postfixString = infixToPostfix(mTextViewExample.getText().toString(), customStack);
+
+            mTextViewResult.setText(postfixString);
+
+
         });
 
     }
 
-    private void setTextExamle(char operand) {
+    private void setTextExamle(String operand) {
         mExample.append(mCurrentTextResult.toString());
         mExample.append(operand);
         mTextViewExample.setText(mExample.toString());
@@ -234,10 +243,57 @@ public class MainActivity extends AppCompatActivity {
         mTextViewResult.setText("");
     }
 
-    private boolean isLastSymbolOperand(){
+    private boolean isLastSymbolOperand() {
         char lastSymbol = mCurrentTextResult.charAt(mCurrentTextResult.length() - 1);
-        if(lastSymbol == '%' || lastSymbol == '.' || lastSymbol == '/' || lastSymbol == '*' || lastSymbol == '-' || lastSymbol == '+')
+        if (lastSymbol == '%' || lastSymbol == '.' || lastSymbol == '/' || lastSymbol == '*' || lastSymbol == '-' || lastSymbol == '+')
             return true;
         return false;
+    }
+
+    private String infixToPostfix(String infixString, CustomStack customStack){ // Преобразование в постфиксную форму
+
+        StringBuilder sbString = new StringBuilder();
+        for (int j = 0; j < infixString.length(); j++) {
+            char ch = infixString.charAt(j);
+
+            switch (ch) {
+                case '+': // + или -
+                case '-':
+                    getOperator(ch, 1, sbString, customStack); // Извлечение операторов
+                    break; // (приоритет 1)
+                case '*': // * или /
+                case '/':
+                    getOperator(ch, 2, sbString, customStack); // Извлечение операторов
+                    break; // (приоритет 2)
+                default: // Остается операнд
+                    sbString.append(ch); // Записать в выходную строку
+                    break;
+            }
+        }
+
+        while (!customStack.isEmpty()) // Извлечение оставшихся операторов
+        {
+            sbString.append(customStack.pop()); // Записать в выходную строку
+        }
+
+        return sbString.toString(); // Возвращение постфиксного выражения
+    }
+
+    private void getOperator(char opThis, int prec1, StringBuilder sbString, CustomStack customStack) { // Чтение оператора из входной строки
+        while (!customStack.isEmpty()) {
+            char opTop = customStack.pop();
+                int prec2; // Приоритет нового оператора
+                if (opTop == '+' || opTop == '-') // Определение приоритета
+                    prec2 = 1;
+                else
+                    prec2 = 2;
+                if (prec2 < prec1) // Если приоритет нового оператора
+                { // меньше приоритета старого
+                    customStack.push(opTop); // Сохранить новый оператор
+                    break;
+                } else // Приоритет нового оператора
+                    sbString.append(opTop); // не меньше приоритета старого
+        }
+        customStack.push(opThis); // Занесение в стек нового оператора
     }
 }
