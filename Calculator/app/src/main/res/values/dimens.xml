@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="keyTextSize">20sp</dimen>
+    <dimen name="keyTextSize">48sp</dimen>
 </resources>
