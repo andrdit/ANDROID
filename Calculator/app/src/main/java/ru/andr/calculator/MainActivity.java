@@ -1,7 +1,11 @@
 package ru.andr.calculator;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
@@ -39,11 +43,26 @@ public class MainActivity extends AppCompatActivity {
     private StringBuilder mExample;
     private ArrayList<String> mExampleArrayList;
 
+  //  private ActionBar mActionBar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.key_board_layout);
 
+
+        ///////  оставил для дальнейшей работы
+        
+//        Button btn = findViewById(R.id.buttonMode);
+//        btn.setOnClickListener((view) -> {
+//            if (AppCompatDelegate.getDefaultNightMode() != AppCompatDelegate.MODE_NIGHT_YES) {
+//                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+//            } else {
+//                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+//            }
+//            recreate();
+//        });
+        ///////
         mCurrentTextResult = new StringBuilder();
         mCurrentTextResult.append("");
 

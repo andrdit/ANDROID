@@ -8,4 +8,11 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="green">#007700</color>
+    <color name="yellow">#ffcc66</color>
+    <color name="red">#ff0000</color>
+    <color name="nightBackground">#828282</color>
+    <color name="nightBackgroundSymbols">#4f4f4f</color>
+    <color name="nightBackgroundNumbers">#333333</color>
+    <color name="nightTextColorWithTextNumbers">#cccccc</color>
+
 </resources>

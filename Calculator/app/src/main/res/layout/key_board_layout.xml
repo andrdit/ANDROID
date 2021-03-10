@@ -1,20 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
 
-    <TextView
-        android:id="@+id/textViewExample"
+    style="@style/CalculatorCommonTheme"
+
+    >
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="@color/purple_700"
-        android:textSize="15sp" />
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/textViewExample"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="15sp" />
+    </LinearLayout>
 
     <Space
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1" />
+
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -31,7 +43,7 @@
             android:textAllCaps="true"
             android:textDirection="locale"
             android:textSize="48sp"
-            android:textColor="@color/black"/>
+            />
     </LinearLayout>
 
     <LinearLayout
@@ -41,12 +53,17 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/buttonClear"
+            style="@style/ButtonsStyleForClear"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
 
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="5dp"
             android:layout_weight="1"
             android:text="@string/textBtnClear"
-            android:textSize="@dimen/keyTextSize" />
+            android:textSize="@dimen/keyTextSize"
+
+            app:backgroundTint="#FFFFFF" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/buttonBackSpace"
@@ -54,25 +71,29 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
 
-            android:textSize="@dimen/keyTextSize"
-            android:text="@string/textBtnBackSpace" />
+            android:text="@string/textBtnBackSpace"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            style="@style/ButtonsStyleForSymbols"/>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/buttonProcents"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-
-            android:textSize="@dimen/keyTextSize"
-            android:text="@string/textBtnProcents" />
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:text="@string/textBtnProcents"
+            style="@style/ButtonsStyleForSymbols"/>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/buttonDivide"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-
-            android:textSize="@dimen/keyTextSize"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="10dp"
+            style="@style/ButtonsStyleForSymbols"
             android:text="@string/textBtnDivide" />
     </LinearLayout>
 
@@ -86,8 +107,9 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-
-            android:textSize="@dimen/keyTextSize"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="5dp"
+            style="@style/ButtonsStyleForNumbers"
             android:text="@string/textBtn7" />
 
         <com.google.android.material.button.MaterialButton
@@ -95,8 +117,9 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-
-            android:textSize="@dimen/keyTextSize"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            style="@style/ButtonsStyleForNumbers"
             android:text="@string/textBtn8" />
 
         <com.google.android.material.button.MaterialButton
@@ -104,8 +127,9 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-
-            android:textSize="@dimen/keyTextSize"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            style="@style/ButtonsStyleForNumbers"
             android:text="@string/textBtn9" />
 
         <com.google.android.material.button.MaterialButton
@@ -113,8 +137,9 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-
-            android:textSize="@dimen/keyTextSize"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="10dp"
+            style="@style/ButtonsStyleForSymbols"
             android:text="@string/textBtnMultiply" />
     </LinearLayout>
 
@@ -128,8 +153,9 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-
-            android:textSize="@dimen/keyTextSize"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="5dp"
+            style="@style/ButtonsStyleForNumbers"
             android:text="@string/textBtn4" />
 
         <com.google.android.material.button.MaterialButton
@@ -137,8 +163,9 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-
-            android:textSize="@dimen/keyTextSize"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            style="@style/ButtonsStyleForNumbers"
             android:text="@string/textBtn5" />
 
         <com.google.android.material.button.MaterialButton
@@ -146,8 +173,9 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-
-            android:textSize="@dimen/keyTextSize"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            style="@style/ButtonsStyleForNumbers"
             android:text="@string/textBtn6" />
 
         <com.google.android.material.button.MaterialButton
@@ -155,8 +183,9 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-
-            android:textSize="@dimen/keyTextSize"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="10dp"
+            style="@style/ButtonsStyleForSymbols"
             android:text="@string/textBtnMinus" />
     </LinearLayout>
 
@@ -170,8 +199,9 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-
-            android:textSize="@dimen/keyTextSize"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="5dp"
+            style="@style/ButtonsStyleForNumbers"
             android:text="@string/textBtn1" />
 
         <com.google.android.material.button.MaterialButton
@@ -179,8 +209,9 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-
-            android:textSize="@dimen/keyTextSize"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            style="@style/ButtonsStyleForNumbers"
             android:text="@string/textBtn2" />
 
         <com.google.android.material.button.MaterialButton
@@ -188,8 +219,9 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-
-            android:textSize="@dimen/keyTextSize"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            style="@style/ButtonsStyleForNumbers"
             android:text="@string/textBtn3" />
 
         <com.google.android.material.button.MaterialButton
@@ -197,8 +229,9 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-
-            android:textSize="@dimen/keyTextSize"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="10dp"
+            style="@style/ButtonsStyleForSymbols"
             android:text="@string/textBtnPlus" />
     </LinearLayout>
 
@@ -213,8 +246,9 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="2"
-
-            android:textSize="@dimen/keyTextSize"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="5dp"
+            style="@style/ButtonsStyleForNumbers"
             android:text="@string/textBtn0" />
 
         <com.google.android.material.button.MaterialButton
@@ -222,9 +256,10 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-
-            android:textSize="@dimen/keyTextSize"
-            android:text="@string/textBtnPt" />
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:text="@string/textBtnPt"
+            style="@style/ButtonsStyleForSymbols"/>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/buttonEquel"
@@ -232,8 +267,10 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
 
-            android:textSize="@dimen/keyTextSize"
-            android:text="@string/textBtnEquel" />
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="6dp"
+            android:text="@string/textBtnEquel"
+            style="@style/ButtonsStyleForSymbols"/>
 
     </LinearLayout>
 
