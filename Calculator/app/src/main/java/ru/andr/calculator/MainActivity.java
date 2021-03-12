@@ -1,5 +1,6 @@
 package ru.andr.calculator;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 
@@ -39,7 +40,14 @@ public class MainActivity extends AppCompatActivity {
     private StringBuilder mExample;
     private ArrayList<String> mExampleArrayList;
 
-    private static final String DAY_NIGHT_MODE = "Night mode";
+    //keys for save instance state
+    private static final String KEY_DAY_NIGHT_MODE = "Night mode";
+    private static final String KEY_CURRENT_STATE_TEXT_VIEW_RESULT = "KEY_CURRENT_STATE_TEXT_VIEW_RESULT";
+    private static final String KEY_CURRENT_STATE_TEXT_VIEW_EXAMPLE = "KEY_CURRENT_STATE_TEXT_VIEW_EXAMPLE";
+    private static final String KEY_mCurrentTextResult = "KEY_mCurrentTextResult";
+    private static final String KEY_mExample = "KEY_mExample";
+    private static final String KEY_mExampleArrayList = "KEY_mExampleArrayList";
+
     // Имя настроек
     private static final String NameSharedPreference = "SETTINGS";
     private boolean mIsNightMode;
@@ -79,7 +87,11 @@ public class MainActivity extends AppCompatActivity {
         mExampleArrayList = new ArrayList<>();
 
         init();
+
+
     }
+
+
 
     private void init() {
 
@@ -439,7 +451,7 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences sharedPref = getSharedPreferences(NameSharedPreference, MODE_PRIVATE);
         // Настройки сохраняются посредством специального класса editor.
         SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putBoolean(DAY_NIGHT_MODE, isNightMode);
+        editor.putBoolean(KEY_DAY_NIGHT_MODE, isNightMode);
         editor.commit();
     }
 
@@ -447,7 +459,7 @@ public class MainActivity extends AppCompatActivity {
         // Работаем через специальный класс сохранения и чтения настроек
         SharedPreferences sharedPref = getSharedPreferences(NameSharedPreference, MODE_PRIVATE);
 
-        return sharedPref.getBoolean(DAY_NIGHT_MODE, false);
+        return sharedPref.getBoolean(KEY_DAY_NIGHT_MODE, false);
     }
 
     private void onOffNightMode(boolean isNightMode) {
@@ -467,5 +479,25 @@ public class MainActivity extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
         saveDayNightMode(mIsNightMode);
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle instanceState) {
+        super.onSaveInstanceState(instanceState);
+        instanceState.putString(KEY_CURRENT_STATE_TEXT_VIEW_RESULT, mTextViewResult.getText().toString());
+        instanceState.putString(KEY_CURRENT_STATE_TEXT_VIEW_EXAMPLE, mTextViewExample.getText().toString());
+        instanceState.putString(KEY_mCurrentTextResult, mCurrentTextResult.toString());
+        instanceState.putString(KEY_mExample, mExample.toString());
+        instanceState.putSerializable(KEY_mExampleArrayList, mExampleArrayList);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        mTextViewResult.setText(savedInstanceState.getString(KEY_CURRENT_STATE_TEXT_VIEW_RESULT));
+        mTextViewExample.setText(savedInstanceState.getString(KEY_CURRENT_STATE_TEXT_VIEW_EXAMPLE));
+        mCurrentTextResult.append(savedInstanceState.getString(KEY_mCurrentTextResult));
+        mExample.append(savedInstanceState.getString(KEY_mExample));
+        mExampleArrayList = (ArrayList<String>) savedInstanceState.getSerializable(KEY_mExampleArrayList);
     }
 }
