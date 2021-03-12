@@ -6,9 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
 
-    style="@style/CalculatorCommonTheme"
-
-    >
+    style="@style/CalculatorCommonTheme">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -28,9 +26,14 @@
         android:orientation="horizontal">
 
         <com.google.android.material.switchmaterial.SwitchMaterial
-            android:id="@+id/mSwitch"
-            android:layout_width="wrap_content"
+            android:id="@+id/mSwitchSettings"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:layout_weight="1"
+            android:textAllCaps="true"
+            android:textSize="15sp"
+            android:textAlignment="viewEnd"
             android:text="@string/textOnSwitch" />
     </LinearLayout>
 
@@ -40,11 +43,11 @@
         android:layout_weight="1" />
 
 
-    <Button
+   <!-- <Button
         android:id="@+id/buttonMode"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Button" />
+        android:text="Button" /> -->
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -95,24 +98,24 @@
             style="@style/ButtonsStyleForSymbols"/>
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/buttonProcents"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:text="@string/textBtnProcents"
-            style="@style/ButtonsStyleForSymbols"/>
-
-        <com.google.android.material.button.MaterialButton
             android:id="@+id/buttonDivide"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_marginLeft="5dp"
-            android:layout_marginRight="10dp"
+            android:layout_marginRight="5dp"
             style="@style/ButtonsStyleForSymbols"
             android:text="@string/textBtnDivide" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/buttonMultiply"
+            style="@style/ButtonsStyleForSymbols"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="10dp"
+            android:layout_weight="1"
+            android:text="@string/textBtnMultiply" />
     </LinearLayout>
 
     <LinearLayout
@@ -151,14 +154,15 @@
             android:text="@string/textBtn9" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/buttonMultiply"
+            android:id="@+id/buttonMinus"
+            style="@style/ButtonsStyleForSymbols"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="10dp"
-            style="@style/ButtonsStyleForSymbols"
-            android:text="@string/textBtnMultiply" />
+            android:layout_weight="1"
+            android:text="@string/textBtnMinus" />
+
     </LinearLayout>
 
     <LinearLayout
@@ -197,14 +201,15 @@
             android:text="@string/textBtn6" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/buttonMinus"
+            android:id="@+id/buttonPlus"
+            style="@style/ButtonsStyleForSymbols"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="10dp"
-            style="@style/ButtonsStyleForSymbols"
-            android:text="@string/textBtnMinus" />
+            android:layout_weight="1"
+            android:text="@string/textBtnPlus" />
+
     </LinearLayout>
 
     <LinearLayout
@@ -243,14 +248,15 @@
             android:text="@string/textBtn3" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/buttonPlus"
+            android:id="@+id/buttonPt"
+            style="@style/ButtonsStyleForSymbols"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="10dp"
-            style="@style/ButtonsStyleForSymbols"
-            android:text="@string/textBtnPlus" />
+            android:layout_weight="1"
+            android:text="@string/textBtnPt" />
+
     </LinearLayout>
 
     <LinearLayout
@@ -263,21 +269,11 @@
             android:id="@+id/button0"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="2"
+            android:layout_weight="1"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="5dp"
             style="@style/ButtonsStyleForNumbers"
             android:text="@string/textBtn0" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/buttonPt"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:text="@string/textBtnPt"
-            style="@style/ButtonsStyleForSymbols"/>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/buttonEquel"
@@ -286,7 +282,7 @@
             android:layout_weight="1"
 
             android:layout_marginRight="10dp"
-            android:layout_marginLeft="6dp"
+            android:layout_marginLeft="5dp"
             android:text="@string/textBtnEquel"
             style="@style/ButtonsStyleForSymbols"/>
 

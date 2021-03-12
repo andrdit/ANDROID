@@ -7,9 +7,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
-
 import com.google.android.material.switchmaterial.SwitchMaterial;
-
 import java.util.ArrayList;
 import java.util.Stack;
 
@@ -27,7 +25,6 @@ public class MainActivity extends AppCompatActivity {
     private Button mBtn9;
     private Button mBtnClear;
     private Button mBtnBackSpace;
-    private Button mBtnProcents;
     private Button mBtnDivide;
     private Button mBtnMultiply;
     private Button mBtnMinus;
@@ -48,23 +45,24 @@ public class MainActivity extends AppCompatActivity {
     private boolean mIsNightMode;
     private SwitchMaterial mSwitchOnOffNightMode;
 
-    //  private ActionBar mActionBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.key_board_layout);
 
-       //onOffNightMode(getIsNightMode());
+        mIsNightMode = getIsNightMode();
 
-        ///////  оставил для дальнейшей работы
-//        mSwitchOnOffNightMode = findViewById(R.id.mSwitch);
-//        mSwitchOnOffNightMode.setOnCheckedChangeListener((view) -> {
-//            mIsNightMode = !mIsNightMode;
-//            saveDayNightMode(mIsNightMode);
-//            onOffNightMode(getIsNightMode());
-//        });
-//
+        mSwitchOnOffNightMode = (SwitchMaterial) findViewById(R.id.mSwitchSettings);
+
+        mSwitchOnOffNightMode.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                onOffNightMode(isChecked);
+        });
+
+        mSwitchOnOffNightMode.setChecked(mIsNightMode);
+        onOffNightMode(mIsNightMode);
+
+
 //        Button btn = findViewById(R.id.buttonMode);
 //        btn.setOnClickListener((view) -> {
 //            mIsNightMode = !mIsNightMode;
@@ -97,7 +95,6 @@ public class MainActivity extends AppCompatActivity {
         mBtn9 = (Button) findViewById(R.id.button9);
         mBtnClear = (Button) findViewById(R.id.buttonClear);
         mBtnBackSpace = (Button) findViewById(R.id.buttonBackSpace);
-        mBtnProcents = (Button) findViewById(R.id.buttonProcents);
         mBtnDivide = (Button) findViewById(R.id.buttonDivide);
         mBtnMultiply = (Button) findViewById(R.id.buttonMultiply);
         mBtnMinus = (Button) findViewById(R.id.buttonMinus);
@@ -197,16 +194,6 @@ public class MainActivity extends AppCompatActivity {
             mTextViewResult.setText(mCurrentTextResult.toString());
         });
 
-        mBtnProcents.setOnClickListener(view -> {
-            if (mCurrentTextResult.length() == 0)
-                return;
-
-            if (isLastSymbolOperand())
-                return;
-
-            setTextExamle("/");
-
-        });
 
         mBtnDivide.setOnClickListener(view -> {
             if (mCurrentTextResult.length() == 0)
@@ -453,7 +440,7 @@ public class MainActivity extends AppCompatActivity {
         // Настройки сохраняются посредством специального класса editor.
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putBoolean(DAY_NIGHT_MODE, isNightMode);
-        editor.apply();
+        editor.commit();
     }
 
     private boolean getIsNightMode() {
@@ -467,18 +454,18 @@ public class MainActivity extends AppCompatActivity {
 
         if (isNightMode) {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-            mIsNightMode = false;
         } else {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-            mIsNightMode = true;
         }
+
+        mIsNightMode = isNightMode;
         if(isNightMode != mIsNightMode)
         recreate();
     }
 
-//    @Override
-//    protected void onStop() {
-//        super.onStop();
-//        setDayNightMode();
-//    }
+    @Override
+    protected void onStop() {
+        super.onStop();
+        saveDayNightMode(mIsNightMode);
+    }
 }
