@@ -4,11 +4,14 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
+
 import com.google.android.material.switchmaterial.SwitchMaterial;
+
 import java.util.ArrayList;
 import java.util.Stack;
 
@@ -32,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
     private Button mBtnPlus;
     private Button mBtnEquel;
     private Button mBtnPt;
+    private Button mBtnSettings;
 
     private TextView mTextViewResult;
     private TextView mTextViewExample;
@@ -40,19 +44,7 @@ public class MainActivity extends AppCompatActivity {
     private StringBuilder mExample;
     private ArrayList<String> mExampleArrayList;
 
-    //keys for save instance state
-    private static final String KEY_DAY_NIGHT_MODE = "Night mode";
-    private static final String KEY_CURRENT_STATE_TEXT_VIEW_RESULT = "KEY_CURRENT_STATE_TEXT_VIEW_RESULT";
-    private static final String KEY_CURRENT_STATE_TEXT_VIEW_EXAMPLE = "KEY_CURRENT_STATE_TEXT_VIEW_EXAMPLE";
-    private static final String KEY_mCurrentTextResult = "KEY_mCurrentTextResult";
-    private static final String KEY_mExample = "KEY_mExample";
-    private static final String KEY_mExampleArrayList = "KEY_mExampleArrayList";
-
-    // Имя настроек
-    private static final String NameSharedPreference = "SETTINGS";
     private boolean mIsNightMode;
-    private SwitchMaterial mSwitchOnOffNightMode;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,23 +53,8 @@ public class MainActivity extends AppCompatActivity {
 
         mIsNightMode = getIsNightMode();
 
-        mSwitchOnOffNightMode = (SwitchMaterial) findViewById(R.id.mSwitchSettings);
-
-        mSwitchOnOffNightMode.setOnCheckedChangeListener((buttonView, isChecked) -> {
-                onOffNightMode(isChecked);
-        });
-
-        mSwitchOnOffNightMode.setChecked(mIsNightMode);
         onOffNightMode(mIsNightMode);
 
-
-//        Button btn = findViewById(R.id.buttonMode);
-//        btn.setOnClickListener((view) -> {
-//            mIsNightMode = !mIsNightMode;
-//            saveDayNightMode(mIsNightMode);
-//            onOffNightMode(getIsNightMode());
-//        });
-        ///////
         mCurrentTextResult = new StringBuilder();
         mCurrentTextResult.append("");
 
@@ -87,13 +64,11 @@ public class MainActivity extends AppCompatActivity {
         mExampleArrayList = new ArrayList<>();
 
         init();
-
-
     }
 
-
-
     private void init() {
+
+        mBtnSettings = (Button) findViewById(R.id.btnSettings);
 
         mBtn0 = (Button) findViewById(R.id.button0);
         mBtn1 = (Button) findViewById(R.id.button1);
@@ -127,6 +102,15 @@ public class MainActivity extends AppCompatActivity {
             mTextViewExample.setText("");
 
             mExampleArrayList.clear();
+        });
+
+        mBtnSettings.setOnClickListener(view -> {
+            Intent intent = new Intent(this, SettingsActivity.class);
+
+            //  ActivityInfo activityInfo = intent.resolveActivityInfo(getPackageManager(), intent.getFlags());
+            //  if(activityInfo != null){
+            startActivity(intent);
+            // }
         });
 
         mBtn0.setOnClickListener(view -> {
@@ -446,20 +430,11 @@ public class MainActivity extends AppCompatActivity {
 //        }
     }
 
-    // Сохранение настроек
-    private void saveDayNightMode(boolean isNightMode) {
-        SharedPreferences sharedPref = getSharedPreferences(NameSharedPreference, MODE_PRIVATE);
-        // Настройки сохраняются посредством специального класса editor.
-        SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putBoolean(KEY_DAY_NIGHT_MODE, isNightMode);
-        editor.commit();
-    }
-
     private boolean getIsNightMode() {
         // Работаем через специальный класс сохранения и чтения настроек
-        SharedPreferences sharedPref = getSharedPreferences(NameSharedPreference, MODE_PRIVATE);
+        SharedPreferences sharedPref = getSharedPreferences(CommonPreferences.NameSharedPreference, MODE_PRIVATE);
 
-        return sharedPref.getBoolean(KEY_DAY_NIGHT_MODE, false);
+        return sharedPref.getBoolean(CommonPreferences.KEY_DAY_NIGHT_MODE, false);
     }
 
     private void onOffNightMode(boolean isNightMode) {
@@ -469,35 +444,27 @@ public class MainActivity extends AppCompatActivity {
         } else {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         }
-
-        mIsNightMode = isNightMode;
-        if(isNightMode != mIsNightMode)
-        recreate();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        saveDayNightMode(mIsNightMode);
     }
 
     @Override
     protected void onSaveInstanceState(@NonNull Bundle instanceState) {
         super.onSaveInstanceState(instanceState);
-        instanceState.putString(KEY_CURRENT_STATE_TEXT_VIEW_RESULT, mTextViewResult.getText().toString());
-        instanceState.putString(KEY_CURRENT_STATE_TEXT_VIEW_EXAMPLE, mTextViewExample.getText().toString());
-        instanceState.putString(KEY_mCurrentTextResult, mCurrentTextResult.toString());
-        instanceState.putString(KEY_mExample, mExample.toString());
-        instanceState.putSerializable(KEY_mExampleArrayList, mExampleArrayList);
+
+        instanceState.putString(CommonPreferences.KEY_CURRENT_STATE_TEXT_VIEW_RESULT, mTextViewResult.getText().toString());
+        instanceState.putString(CommonPreferences.KEY_CURRENT_STATE_TEXT_VIEW_EXAMPLE, mTextViewExample.getText().toString());
+        instanceState.putString(CommonPreferences.KEY_mCurrentTextResult, mCurrentTextResult.toString());
+        instanceState.putString(CommonPreferences.KEY_mExample, mExample.toString());
+        instanceState.putSerializable(CommonPreferences.KEY_mExampleArrayList, mExampleArrayList);
     }
 
     @Override
     protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        mTextViewResult.setText(savedInstanceState.getString(KEY_CURRENT_STATE_TEXT_VIEW_RESULT));
-        mTextViewExample.setText(savedInstanceState.getString(KEY_CURRENT_STATE_TEXT_VIEW_EXAMPLE));
-        mCurrentTextResult.append(savedInstanceState.getString(KEY_mCurrentTextResult));
-        mExample.append(savedInstanceState.getString(KEY_mExample));
-        mExampleArrayList = (ArrayList<String>) savedInstanceState.getSerializable(KEY_mExampleArrayList);
+
+        mTextViewResult.setText(savedInstanceState.getString(CommonPreferences.KEY_CURRENT_STATE_TEXT_VIEW_RESULT));
+        mTextViewExample.setText(savedInstanceState.getString(CommonPreferences.KEY_CURRENT_STATE_TEXT_VIEW_EXAMPLE));
+        mCurrentTextResult.append(savedInstanceState.getString(CommonPreferences.KEY_mCurrentTextResult));
+        mExample.append(savedInstanceState.getString(CommonPreferences.KEY_mExample));
+        mExampleArrayList = (ArrayList<String>) savedInstanceState.getSerializable(CommonPreferences.KEY_mExampleArrayList);
     }
 }

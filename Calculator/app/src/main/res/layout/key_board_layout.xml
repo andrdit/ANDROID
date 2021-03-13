@@ -25,16 +25,20 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <com.google.android.material.switchmaterial.SwitchMaterial
-            android:id="@+id/mSwitchSettings"
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnSettings"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_gravity="right"
             android:layout_weight="1"
-            android:textAllCaps="true"
-            android:textSize="15sp"
-            android:textAlignment="viewEnd"
-            android:text="@string/textOnSwitch" />
+            android:text="@string/text_settingsButton"
+            style="@style/ButtonsStyleForSymbols"
+            android:textSize="9sp"/>
+
     </LinearLayout>
 
     <Space
@@ -82,9 +86,7 @@
             android:layout_marginRight="5dp"
             android:layout_weight="1"
             android:text="@string/textBtnClear"
-            android:textSize="@dimen/keyTextSize"
-
-            app:backgroundTint="#FFFFFF" />
+            android:textSize="@dimen/keyTextSize"/>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/buttonBackSpace"
