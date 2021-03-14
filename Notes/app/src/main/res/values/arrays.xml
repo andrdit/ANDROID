@@ -6,6 +6,7 @@
         <item>Note 3</item>
         <item>Note 4</item>
         <item>Note 5</item>
+        <item>Note 6</item>
     </string-array>
 
     <string-array name="description_note">
@@ -14,6 +15,7 @@
         <item>Something doing 3</item>
         <item>Something doing 4</item>
         <item>Something doing 5</item>
+        <item>Something doing 6</item>
     </string-array>
 
     <string-array name="createDate_note">
@@ -22,6 +24,7 @@
         <item>03.03.2021</item>
         <item>04.04.2021</item>
         <item>05.05.2021</item>
+        <item>06.06.2021</item>
     </string-array>
 
     <integer-array name="index_note">
