@@ -28,6 +28,7 @@
     </string-array>
 
     <integer-array name="index_note">
+        <item>0</item>
         <item>1</item>
         <item>2</item>
         <item>3</item>
