@@ -7,6 +7,8 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,10 +18,6 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * A simple {@link Fragment} subclass.
- * create an instance of this fragment.
- */
 public class FragmentNoteList extends Fragment {
 
     private int mCurrentNoteIdx = -1;
@@ -52,7 +50,7 @@ public class FragmentNoteList extends Fragment {
                 if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
                     openAnotherActivity(note);
                 }else{
-                  //  showToRight(index);
+                    showToRight(note);
                 }
             });
             viewGroup.addView(textViewNote);
@@ -69,6 +67,14 @@ public class FragmentNoteList extends Fragment {
         Intent intent = new Intent(getActivity(), DescriptionActivity.class);
         intent.putExtra(DescriptionActivity.KEY_NOTE, note);
         startActivity(intent);
+    }
+
+    private void showToRight(Note note) {
+        FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.replace(R.id.note_description, FragmentDescription.newInstance(note));
+        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+        transaction.commit();
     }
 
     private void initNotes(int[] indexNote, String[] nameNote, String[] descriptionNote, String[] createDateNote){
@@ -94,7 +100,7 @@ public class FragmentNoteList extends Fragment {
         if(bundle != null) {
             mCurrentNote = bundle.getParcelable(FragmentDescription.ARG_NOTE);
             if(mCurrentNote != null && getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-               // showToRight(mCurrentNoteIdx);
+                showToRight(mCurrentNote);
             }
 
         }

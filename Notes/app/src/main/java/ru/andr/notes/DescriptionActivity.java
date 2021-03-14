@@ -9,7 +9,6 @@ import android.os.Bundle;
 
 public class DescriptionActivity extends AppCompatActivity {
 
-    //public static final String KEY_NOTE_INDEX = "DescriptionActivity.note_idx";
     public static final String KEY_NOTE = "DescriptionActivity.note";
 
     @Override
