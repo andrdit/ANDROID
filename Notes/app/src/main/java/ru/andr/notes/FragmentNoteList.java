@@ -48,7 +48,12 @@ public class FragmentNoteList extends Fragment {
             textViewNote.setOnClickListener(v -> {
                 setCurrentNote(note);
                 if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-                    openAnotherActivity(note);
+                    FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+                    FragmentTransaction transaction = fragmentManager.beginTransaction();
+                    transaction.replace(R.id.fragments_container, FragmentDescription.newInstance(note));
+                    transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+                    transaction.addToBackStack(null);
+                    transaction.commit();
                 }else{
                     showToRight(note);
                 }
@@ -63,17 +68,12 @@ public class FragmentNoteList extends Fragment {
         mCurrentNote = note;
     }
 
-    private void openAnotherActivity(Note note) {
-        Intent intent = new Intent(getActivity(), DescriptionActivity.class);
-        intent.putExtra(DescriptionActivity.KEY_NOTE, note);
-        startActivity(intent);
-    }
-
     private void showToRight(Note note) {
         FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.replace(R.id.note_description, FragmentDescription.newInstance(note));
         transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+        transaction.addToBackStack(null);
         transaction.commit();
     }
 

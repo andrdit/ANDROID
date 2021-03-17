@@ -1,15 +1,16 @@
 package ru.andr.notes;
 
+import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
 
 public class FragmentDescription extends Fragment {
@@ -27,6 +28,7 @@ public class FragmentDescription extends Fragment {
         Bundle args = new Bundle();
         args.putParcelable(ARG_NOTE, note);
         fragment.setArguments(args);
+    //    fragment.setRetainInstance(true);
         return fragment;
     }
 
@@ -57,5 +59,21 @@ public class FragmentDescription extends Fragment {
         tvCreateDateNote.setText(mNote.getmDateCreate());
         tvDescriptionNote.setText(mNote.getmDescription());
     }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle bundle){
+        super.onSaveInstanceState(bundle);
+
+        bundle.putParcelable(FragmentDescription.ARG_NOTE, mNote);
+    }
+
+    public interface changeStateOfFragment{
+        void saveInstanceOfFragment(Note note);
+    }
+
+    public Note getmNote(){
+        return mNote;
+    }
+
 
 }

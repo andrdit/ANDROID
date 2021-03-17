@@ -5,12 +5,19 @@
     android:layout_height="match_parent"
     android:orientation="horizontal">
 
-    <fragment
+   <!-- <fragment
         android:id="@+id/notes_container"
         android:name="ru.andr.notes.FragmentNoteList"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="1"/>
+        android:layout_weight="1"/> -->
+
+    <FrameLayout
+        android:id="@+id/fragments_container"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1">
+    </FrameLayout>
 
     <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
@@ -19,7 +26,7 @@
         android:id="@+id/note_description"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        tools:context=".DescriptionActivity"
+        tools:context=".MainActivity"
         android:orientation="vertical"
         android:layout_weight="3">
 
