@@ -1,7 +1,5 @@
 package ru.andr.notes;
 
-import android.app.Activity;
-import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -62,9 +60,9 @@ public class FragmentDescription extends Fragment {
         TextView tvCreateDateNote = view.findViewById(R.id.createDate_note);
         TextView tvDescriptionNote = view.findViewById(R.id.description_note);
 
-        tvNameNote.setText(mNote.getmName());
-        tvCreateDateNote.setText(mNote.getmDateCreate());
-        tvDescriptionNote.setText(mNote.getmDescription());
+        tvNameNote.setText(mNote.getName());
+        tvCreateDateNote.setText(mNote.getDateCreate());
+        tvDescriptionNote.setText(mNote.getDescription());
     }
 
     @Override
@@ -85,12 +83,12 @@ public class FragmentDescription extends Fragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         //добавим пункт меню из фрагмента в ToolBar
-        inflater.inflate(R.menu.main_fragment, menu);
+        inflater.inflate(R.menu.item_menu_change_description, menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == R.id.action_change) {
+        if (item.getItemId() == R.id.action_change_description) {
             Toast.makeText(getContext(), "Change note description", Toast.LENGTH_SHORT).show();
             return true;
         }

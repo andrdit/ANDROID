@@ -50,19 +50,19 @@ public class Note implements Parcelable {
         }
     };
 
-    public int getmIndex() {
+    public int getIndex() {
         return mIndex;
     }
 
-    public String getmName() {
+    public String getName() {
         return mName;
     }
 
-    public String getmDescription() {
+    public String getDescription() {
         return mDescription;
     }
 
-    public String getmDateCreate() {
+    public String getDateCreate() {
         return mDateCreate;
     }
 }

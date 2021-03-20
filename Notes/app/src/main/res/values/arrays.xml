@@ -7,6 +7,18 @@
         <item>Note 4</item>
         <item>Note 5</item>
         <item>Note 6</item>
+        <item>Note 7</item>
+        <item>Note 8</item>
+        <item>Note 9</item>
+        <item>Note 10</item>
+        <item>Note 11</item>
+        <item>Note 12</item>
+        <item>Note 13</item>
+        <item>Note 14</item>
+        <item>Note 15</item>
+        <item>Note 16</item>
+        <item>Note 17</item>
+        <item>Note 18</item>
     </string-array>
 
     <string-array name="description_note">
@@ -16,9 +28,33 @@
         <item>Something doing 4</item>
         <item>Something doing 5</item>
         <item>Something doing 6</item>
+        <item>Something doing 7</item>
+        <item>Something doing 8</item>
+        <item>Something doing 9</item>
+        <item>Something doing 10</item>
+        <item>Something doing 11</item>
+        <item>Something doing 12</item>
+        <item>Something doing 13</item>
+        <item>Something doing 14</item>
+        <item>Something doing 15</item>
+        <item>Something doing 16</item>
+        <item>Something doing 17</item>
+        <item>Something doing 18</item>
     </string-array>
 
     <string-array name="createDate_note">
+        <item>01.01.2021</item>
+        <item>02.02.2021</item>
+        <item>03.03.2021</item>
+        <item>04.04.2021</item>
+        <item>05.05.2021</item>
+        <item>06.06.2021</item>
+        <item>01.01.2021</item>
+        <item>02.02.2021</item>
+        <item>03.03.2021</item>
+        <item>04.04.2021</item>
+        <item>05.05.2021</item>
+        <item>06.06.2021</item>
         <item>01.01.2021</item>
         <item>02.02.2021</item>
         <item>03.03.2021</item>
@@ -34,5 +70,17 @@
         <item>3</item>
         <item>4</item>
         <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+        <item>10</item>
+        <item>11</item>
+        <item>12</item>
+        <item>13</item>
+        <item>14</item>
+        <item>15</item>
+        <item>16</item>
+        <item>17</item>
     </integer-array>
 </resources>

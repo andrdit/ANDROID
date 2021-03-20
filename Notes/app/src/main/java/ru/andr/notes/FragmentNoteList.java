@@ -1,6 +1,5 @@
 package ru.andr.notes;
 
-import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 
@@ -9,6 +8,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -20,13 +21,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class FragmentNoteList extends Fragment {
 
     private int mCurrentNoteIdx = -1;
     private Note mCurrentNote = null;
-    private List<Note> mNotes;
+    private ArrayList<Note> mNotes;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -48,27 +48,40 @@ public class FragmentNoteList extends Fragment {
 
         initNotes(indexNote, nameNote, descriptionNote, createDateNote);
 
-        for (Note note : mNotes) {
-            TextView textViewNote = new TextView(getContext());
-            textViewNote.setText(note.getmName());
-            textViewNote.setTextSize(40);
-            textViewNote.setOnClickListener(v -> {
-                setCurrentNote(note);
-                if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-                    FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
-                    FragmentTransaction transaction = fragmentManager.beginTransaction();
-                    transaction.replace(R.id.fragments_container, FragmentDescription.newInstance(note));
-                    transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-                    transaction.addToBackStack(null);
-                    transaction.commit();
-                } else {
-                    showToRight(note);
-                }
-            });
-            viewGroup.addView(textViewNote);
-        }
+        RecyclerView recyclerView = viewGroup.findViewById(R.id.recycler_view_lines);
+
+        initRecyclerView(recyclerView, inflater);
 
         return viewGroup;
+
+    }
+
+    private void initRecyclerView(RecyclerView recyclerView, LayoutInflater inflater) {
+
+        // Эта установка служит для повышения производительности системы
+        recyclerView.setHasFixedSize(true);
+
+        // Будем работать со встроенным менеджером
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+        recyclerView.setLayoutManager(layoutManager);
+
+        // Установим адаптер
+        ViewHolderAdapter viewHolderAdapter = new ViewHolderAdapter(inflater, mNotes);
+        recyclerView.setAdapter(viewHolderAdapter);
+
+        // Установим слушателя
+        viewHolderAdapter.setOnClickListener((v, position) -> {
+            if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+                FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+                FragmentTransaction transaction = fragmentManager.beginTransaction();
+                transaction.replace(R.id.fragment_note_list_container, FragmentDescription.newInstance(mNotes.get(position)));
+                transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+                transaction.addToBackStack(null);
+                transaction.commit();
+            } else {
+                showToRight(mNotes.get(position));
+            }
+        });
     }
 
     private void setCurrentNote(Note note) {
@@ -78,7 +91,7 @@ public class FragmentNoteList extends Fragment {
     private void showToRight(Note note) {
         FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
-        transaction.replace(R.id.note_description, FragmentDescription.newInstance(note));
+        transaction.replace(R.id.fragment_description, FragmentDescription.newInstance(note));
         transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
         transaction.addToBackStack(null);
         transaction.commit();
@@ -116,7 +129,7 @@ public class FragmentNoteList extends Fragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         //добавим пункт меню из фрагмента в ToolBar
-        inflater.inflate(R.menu.main_fragment, menu);
+        inflater.inflate(R.menu.item_menu_change, menu);
     }
 
     @Override
@@ -126,5 +139,57 @@ public class FragmentNoteList extends Fragment {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private static class ViewHolder extends RecyclerView.ViewHolder {
+
+        public final TextView text;
+
+        public ViewHolder(@NonNull View itemView) {
+            super(itemView);
+            text = itemView.findViewById(R.id.item_list_note);
+        }
+    }
+
+    private interface OnClickListener {
+        void onItemClick(View v, int position);
+    }
+
+    private static class ViewHolderAdapter extends RecyclerView.Adapter<ViewHolder> {
+        private final LayoutInflater mInflater;
+        private ArrayList<Note> mNotes;
+
+        private OnClickListener mOnClickListener;
+
+        public ViewHolderAdapter(LayoutInflater inflater, ArrayList<Note> notes) {
+            mInflater = inflater;
+            mNotes = notes;
+        }
+
+        public void setOnClickListener(OnClickListener onClickListener) {
+            mOnClickListener = onClickListener;
+        }
+
+        @NonNull
+        @Override
+        public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            View v = mInflater.inflate(R.layout.item_list_note, parent, false);
+            return new ViewHolder(v);
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+            holder.text.setText(mNotes.get(position).getName());
+            holder.text.setOnClickListener(v -> {
+                if (mOnClickListener != null) {
+                    mOnClickListener.onItemClick(v, position);
+                }
+            });
+        }
+
+        @Override
+        public int getItemCount() {
+            return mNotes.size();
+        }
     }
 }

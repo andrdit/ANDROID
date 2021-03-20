@@ -32,12 +32,17 @@ public class MainActivity extends AppCompatActivity {
 
         //readSettings();
         initView();
+        addFragment(savedInstanceState, new FragmentNoteList());
 
+
+    }
+
+    private void addFragment(Bundle savedInstanceState, Fragment fragment) {
         //Получить менеджер фрагментов
         FragmentManager fragmentManager = getSupportFragmentManager();
         // Открыть транзакцию
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.fragments_container, new FragmentNoteList());
+        fragmentTransaction.replace(R.id.fragment_note_list_container, fragment);
         fragmentTransaction.commit();
 
         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
@@ -46,13 +51,14 @@ public class MainActivity extends AppCompatActivity {
                 if (mCurrentNote == null)
                     return;
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
-                transaction.replace(R.id.note_description, FragmentDescription.newInstance(mCurrentNote));
+                transaction.replace(R.id.fragment_description, FragmentDescription.newInstance(mCurrentNote));
                 transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
                 transaction.addToBackStack(null);
                 transaction.commit();
             }
         }
     }
+
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
