@@ -1,5 +1,6 @@
 package ru.andr.notes;
 
+import android.annotation.SuppressLint;
 import android.content.res.Configuration;
 import android.os.Bundle;
 
@@ -10,6 +11,7 @@ import androidx.appcompat.widget.AppCompatImageView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -21,8 +23,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import java.util.ArrayList;
 
 public class FragmentNoteList extends Fragment {
 
@@ -51,10 +51,17 @@ public class FragmentNoteList extends Fragment {
 
     }
 
+    @SuppressLint("UseCompatLoadingForDrawables")
     private void initRecyclerView(RecyclerView recyclerView, LayoutInflater inflater) {
 
         // Эта установка служит для повышения производительности системы
         recyclerView.setHasFixedSize(true);
+
+
+        //добавим разделитель
+        DividerItemDecoration divider = new DividerItemDecoration(requireActivity(), LinearLayoutManager.VERTICAL);
+        divider.setDrawable(getResources().getDrawable(R.drawable.decoration_item_list_notes_divider));
+        recyclerView.addItemDecoration(divider);
 
         // Будем работать со встроенным менеджером
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());

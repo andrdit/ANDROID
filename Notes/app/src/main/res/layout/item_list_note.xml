@@ -7,7 +7,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:background="@drawable/item_list_note_background">
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/item_list_is_favorite"
@@ -15,7 +16,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:scaleType="center"
-            tools:src="@android:drawable/btn_star_big_off"
+            tools:src="@android:drawable/btn_star"
             android:layout_gravity="center_vertical"
             android:layout_margin="5dp"/>
 
@@ -27,16 +28,6 @@
             android:text="Item List Notes"
             android:textSize="@dimen/item_list_note"
             android:layout_weight="7"/>
-
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/item_list_is_completed"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:scaleType="center"
-            android:src="@android:drawable/btn_star_big_off"
-            android:layout_gravity="center_vertical"
-            android:layout_margin="5dp"/>
 
     </LinearLayout>
 

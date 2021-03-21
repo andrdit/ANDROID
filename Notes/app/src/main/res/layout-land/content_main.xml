@@ -18,6 +18,13 @@
         android:layout_weight="1">
     </FrameLayout>
 
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="0.03"
+        app:srcCompat="@drawable/decoration_item_list_notes_divider" />
+
     <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
