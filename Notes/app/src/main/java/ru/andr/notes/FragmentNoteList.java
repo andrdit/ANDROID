@@ -3,8 +3,10 @@ package ru.andr.notes;
 import android.content.res.Configuration;
 import android.os.Bundle;
 
+import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatImageView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -24,9 +26,9 @@ import java.util.ArrayList;
 
 public class FragmentNoteList extends Fragment {
 
-    private int mCurrentNoteIdx = -1;
-    private Note mCurrentNote = null;
-    private ArrayList<Note> mNotes;
+    //private int mCurrentNoteIdx = -1;
+    //private Note mCurrentNote = null;
+    //private ArrayList<Note> mNotes;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -40,13 +42,6 @@ public class FragmentNoteList extends Fragment {
         ViewGroup viewGroup = (ViewGroup) inflater.inflate(R.layout.fragment_note_list, container, false);
 
         setHasOptionsMenu(true);
-
-        int[] indexNote = getResources().getIntArray(R.array.index_note);
-        String[] nameNote = getResources().getStringArray(R.array.name_note);
-        String[] descriptionNote = getResources().getStringArray(R.array.description_note);
-        String[] createDateNote = getResources().getStringArray(R.array.createDate_note);
-
-        initNotes(indexNote, nameNote, descriptionNote, createDateNote);
 
         RecyclerView recyclerView = viewGroup.findViewById(R.id.recycler_view_lines);
 
@@ -66,27 +61,34 @@ public class FragmentNoteList extends Fragment {
         recyclerView.setLayoutManager(layoutManager);
 
         // Установим адаптер
-        ViewHolderAdapter viewHolderAdapter = new ViewHolderAdapter(inflater, mNotes);
+        ViewHolderAdapter viewHolderAdapter = new ViewHolderAdapter(inflater, new NotesSourceImpl(getResources()));
         recyclerView.setAdapter(viewHolderAdapter);
 
         // Установим слушателя
-        viewHolderAdapter.setOnClickListener((v, position) -> {
+        viewHolderAdapter.setOnClickListener((v, note) -> {
+            if(v.getId() == R.id.item_list_is_favorite){
+                note.setIsFavorite(!note.isFavorite());
+
+                // пробное изменение статуса :)
+                recyclerView.setAdapter(viewHolderAdapter);
+                return;
+            }
             if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
                 FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
-                transaction.replace(R.id.fragment_note_list_container, FragmentDescription.newInstance(mNotes.get(position)));
+                transaction.replace(R.id.fragment_note_list_container, FragmentDescription.newInstance(note));
                 transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
                 transaction.addToBackStack(null);
                 transaction.commit();
             } else {
-                showToRight(mNotes.get(position));
+                showToRight(note);
             }
         });
     }
 
-    private void setCurrentNote(Note note) {
-        mCurrentNote = note;
-    }
+//    private void setCurrentNote(Note note) {
+//        mCurrentNote = note;
+//    }
 
     private void showToRight(Note note) {
         FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
@@ -97,33 +99,24 @@ public class FragmentNoteList extends Fragment {
         transaction.commit();
     }
 
-    private void initNotes(int[] indexNote, String[] nameNote, String[] descriptionNote, String[] createDateNote) {
-        mNotes = new ArrayList();
-
-        for (int index : indexNote) {
-            Note note = new Note(index, nameNote[index], descriptionNote[index], createDateNote[index]);
-            mNotes.add(note);
-        }
-    }
-
     @Override
     public void onSaveInstanceState(@NonNull Bundle bundle) {
         super.onSaveInstanceState(bundle);
 
-        bundle.putParcelable(FragmentDescription.ARG_NOTE, mCurrentNote);
+       // bundle.putParcelable(FragmentDescription.ARG_NOTE, mNotes);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle bundle) {
         super.onViewCreated(view, bundle);
 
-        if (bundle != null) {
-            mCurrentNote = bundle.getParcelable(FragmentDescription.ARG_NOTE);
-            if (mCurrentNote != null && getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-                showToRight(mCurrentNote);
-            }
-
-        }
+//        if (bundle != null) {
+//            mCurrentNote = bundle.getParcelable(FragmentDescription.ARG_NOTE);
+//            if (mCurrentNote != null && getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+//                showToRight(mCurrentNote);
+//            }
+//
+//        }
     }
 
     @Override
@@ -143,27 +136,46 @@ public class FragmentNoteList extends Fragment {
 
     private static class ViewHolder extends RecyclerView.ViewHolder {
 
-        public final TextView text;
+        private final int IS_TRUE = 1;
+        private final int IS_FALSE = 0;
+
+        private TextView textName;
+        private AppCompatImageView mIsFavoriteStatus;
+        private @DrawableRes int[] mImageFavorite;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            text = itemView.findViewById(R.id.item_list_note);
+            textName = itemView.findViewById(R.id.item_list_note);
+            mIsFavoriteStatus = itemView.findViewById(R.id.item_list_is_favorite);
+        }
+
+        private void populate(NotesSource noteSource, int position) {
+
+            Note note = noteSource.getItemAt(position);
+            mImageFavorite = noteSource.getImageFavoriteStatus();
+            textName.setText(note.getName());
+
+            if(note.isFavorite())
+                mIsFavoriteStatus.setImageResource(mImageFavorite[IS_TRUE]);
+            else
+                mIsFavoriteStatus.setImageResource(mImageFavorite[IS_FALSE]);
         }
     }
 
     private interface OnClickListener {
-        void onItemClick(View v, int position);
+        void onItemClick(View v, Note note);
     }
 
     private static class ViewHolderAdapter extends RecyclerView.Adapter<ViewHolder> {
+
         private final LayoutInflater mInflater;
-        private ArrayList<Note> mNotes;
+        private NotesSource mNoteSource;
 
         private OnClickListener mOnClickListener;
 
-        public ViewHolderAdapter(LayoutInflater inflater, ArrayList<Note> notes) {
+        public ViewHolderAdapter(LayoutInflater inflater, NotesSource notesSource) {
             mInflater = inflater;
-            mNotes = notes;
+            mNoteSource = notesSource;
         }
 
         public void setOnClickListener(OnClickListener onClickListener) {
@@ -179,17 +191,24 @@ public class FragmentNoteList extends Fragment {
 
         @Override
         public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-            holder.text.setText(mNotes.get(position).getName());
-            holder.text.setOnClickListener(v -> {
+
+            holder.populate(mNoteSource, position);
+            holder.textName.setOnClickListener(v -> {
                 if (mOnClickListener != null) {
-                    mOnClickListener.onItemClick(v, position);
+                    mOnClickListener.onItemClick(v, mNoteSource.getItemAt(position));
+                }
+            });
+
+            holder.mIsFavoriteStatus.setOnClickListener(v -> {
+                if (mOnClickListener != null) {
+                    mOnClickListener.onItemClick(v, mNoteSource.getItemAt(position));
                 }
             });
         }
 
         @Override
         public int getItemCount() {
-            return mNotes.size();
+            return mNoteSource.getItemCount();
         }
     }
 }

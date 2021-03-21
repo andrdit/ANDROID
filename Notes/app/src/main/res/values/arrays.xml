@@ -83,4 +83,30 @@
         <item>16</item>
         <item>17</item>
     </integer-array>
+
+    <integer-array name="is_favorite_note">
+        <item>1</item>
+        <item>0</item>
+        <item>1</item>
+        <item>0</item>
+        <item>1</item>
+        <item>0</item>
+        <item>0</item>
+        <item>0</item>
+        <item>0</item>
+        <item>0</item>
+        <item>0</item>
+        <item>1</item>
+        <item>1</item>
+        <item>1</item>
+        <item>1</item>
+        <item>1</item>
+        <item>1</item>
+        <item>1</item>
+    </integer-array>
+
+    <integer-array name="statusImageIsFavorite">
+        <item>@android:drawable/btn_star_big_off</item>
+        <item>@android:drawable/btn_star_big_on</item>
+    </integer-array>
 </resources>
