@@ -5,17 +5,19 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class ViewHolderAdapter extends RecyclerView.Adapter<ViewHolder> {
-
+    private final Fragment mFragment;
     private final LayoutInflater mInflater;
     private NotesSource mNoteSource;
 
     private FragmentNoteList.OnClickListener mOnClickListener;
 
-    public ViewHolderAdapter(LayoutInflater inflater, NotesSource notesSource) {
-        mInflater = inflater;
+    public ViewHolderAdapter(Fragment fragment, NotesSource notesSource) {
+        mFragment = fragment;
+        mInflater = mFragment.getLayoutInflater();
         mNoteSource = notesSource;
     }
 
@@ -33,7 +35,7 @@ public class ViewHolderAdapter extends RecyclerView.Adapter<ViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
-        holder.populate(mNoteSource, position);
+        holder.populate(mFragment, mNoteSource, position);
         holder.textName.setOnClickListener(v -> {
             if (mOnClickListener != null) {
                 mOnClickListener.onItemClick(v, mNoteSource.getItemAt(position));
@@ -45,10 +47,18 @@ public class ViewHolderAdapter extends RecyclerView.Adapter<ViewHolder> {
                 mOnClickListener.onItemClick(v, mNoteSource.getItemAt(position));
             }
         });
+
+        //mFragment.registerForContextMenu(holder.itemView);
+        // Обработчик нажатий на картинке
+//        holder.textName.setOnLongClickListener(v -> {
+//                v.showContextMenu();
+//                return true;
+//        });
     }
 
     @Override
     public int getItemCount() {
         return mNoteSource.getItemCount();
     }
+
 }

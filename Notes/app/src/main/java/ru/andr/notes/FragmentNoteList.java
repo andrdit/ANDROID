@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -44,7 +45,6 @@ public class FragmentNoteList extends Fragment {
 
         setHasOptionsMenu(true);
 
-        //initDrawer(viewGroup);
         mRecyclerView = viewGroup.findViewById(R.id.recycler_view_lines);
 
         initRecyclerView(inflater);
@@ -59,7 +59,6 @@ public class FragmentNoteList extends Fragment {
         // Эта установка служит для повышения производительности системы
         mRecyclerView.setHasFixedSize(true);
 
-
         //добавим разделитель
         DividerItemDecoration divider = new DividerItemDecoration(requireActivity(), LinearLayoutManager.VERTICAL);
         divider.setDrawable(getResources().getDrawable(R.drawable.decoration_item_list_notes_divider));
@@ -71,7 +70,7 @@ public class FragmentNoteList extends Fragment {
 
         // Установим адаптер
         mNoteSourceImpl = new NotesSourceImpl(getResources());
-        mViewHolderAdapter = new ViewHolderAdapter(inflater, mNoteSourceImpl);
+        mViewHolderAdapter = new ViewHolderAdapter(this, mNoteSourceImpl);
         mRecyclerView.setAdapter(mViewHolderAdapter);
 
         // Установим слушателя
@@ -125,6 +124,26 @@ public class FragmentNoteList extends Fragment {
 //            }
 //
 //        }
+    }
+
+    @Override
+    public void onCreateContextMenu(@NonNull ContextMenu menu, @NonNull View v, @Nullable ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        MenuInflater menuInflater = requireActivity().getMenuInflater();
+        menuInflater.inflate(R.menu.context_menu_note_list, menu);
+    }
+
+    @Override
+    public boolean onContextItemSelected(@NonNull MenuItem item) {
+
+        if(item.getItemId() == R.id.action_edit_context_menu){
+
+        } else if(item.getItemId() == R.id.action_delete_context_menu){
+
+        }else{
+            return super.onContextItemSelected(item);
+        }
+        return true;
     }
 
     @Override
@@ -195,5 +214,6 @@ public class FragmentNoteList extends Fragment {
     public interface OnClickListener {
         void onItemClick(View v, Note note);
     }
+
 
 }

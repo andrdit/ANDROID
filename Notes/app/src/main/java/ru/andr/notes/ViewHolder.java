@@ -6,6 +6,7 @@ import android.widget.TextView;
 import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatImageView;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class ViewHolder extends RecyclerView.ViewHolder {
@@ -24,7 +25,7 @@ public class ViewHolder extends RecyclerView.ViewHolder {
         mIsFavoriteStatus = itemView.findViewById(R.id.item_list_is_favorite);
     }
 
-    public void populate(NotesSource noteSource, int position) {
+    public void populate(Fragment fragment, NotesSource noteSource, int position) {
 
         Note note = noteSource.getItemAt(position);
         mImageFavorite = noteSource.getImageFavoriteStatus();
@@ -34,5 +35,15 @@ public class ViewHolder extends RecyclerView.ViewHolder {
             mIsFavoriteStatus.setImageResource(mImageFavorite[IS_TRUE]);
         else
             mIsFavoriteStatus.setImageResource(mImageFavorite[IS_FALSE]);
+
+//        itemView.setOnLongClickListener(v->{
+//            return false;
+//        });
+//
+        fragment.registerForContextMenu(textName);
+    }
+
+    public void clear(Fragment fragment){
+        fragment.unregisterForContextMenu(textName);
     }
 }
