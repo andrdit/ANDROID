@@ -6,6 +6,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import androidx.annotation.DrawableRes;
+import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
 
@@ -82,5 +83,15 @@ public class NotesSourceImpl implements NotesSource, Parcelable {
     @Override
     public int[] getImageFavoriteStatus() {
         return mImageFavorite;
+    }
+
+    @Override
+    public void add(@NonNull Note note) {
+        mNotes.add(note);
+    }
+
+    @Override
+    public void clearAll() {
+        mNotes.clear();
     }
 }

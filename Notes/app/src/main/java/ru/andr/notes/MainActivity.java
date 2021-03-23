@@ -3,7 +3,6 @@ package ru.andr.notes;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -13,7 +12,6 @@ import androidx.fragment.app.FragmentTransaction;
 
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
@@ -100,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 int id = item.getItemId();
-                if (navigateFragment(id)) {
+                if (navigateDrawer(id)) {
                     drawer.closeDrawer(GravityCompat.START);
                     return true;
                 }
@@ -109,44 +107,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Здесь определяем меню приложения (активити)
-        getMenuInflater().inflate(R.menu.main_menu, menu);
-        MenuItem search = menu.findItem(R.id.action_search); // поиск пункта меню поиска
-        SearchView searchText = (SearchView) search.getActionView(); // строка поиска
-        searchText.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-
-            // реагирует на конец ввода поиска
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                Toast.makeText(MainActivity.this, query, Toast.LENGTH_SHORT).show();
-                return true;
-            }
-
-            // реагирует на нажатие каждой клавиши
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                return true;
-            }
-        });
-
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Обработка выбора пункта меню приложения (активити)
-        int id = item.getItemId();
-
-        if (navigateFragment(id)) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    private boolean navigateFragment(int id) {
+    private boolean navigateDrawer(int id) {
         switch (id) {
             case R.id.action_settings:
                 //addFragment(new SettingsFragment());
@@ -156,19 +117,12 @@ public class MainActivity extends AppCompatActivity {
                 //addFragment(new MainFragment());
                 Toast.makeText(MainActivity.this, "Go to favorite fragment notes", Toast.LENGTH_SHORT).show();
                 return true;
-            case R.id.action_add:
-                //addFragment(new FavoriteFragment());
-                Toast.makeText(MainActivity.this, "Add note", Toast.LENGTH_SHORT).show();
-            case R.id.action_delete:
-                //addFragment(new FavoriteFragment());
-                Toast.makeText(MainActivity.this, "Delete note", Toast.LENGTH_SHORT).show();
-                return true;
             case R.id.action_about:
                 //addFragment(new FavoriteFragment());
                 Toast.makeText(MainActivity.this, "About application", Toast.LENGTH_SHORT).show();
                 return true;
         }
-        return false;
+           return false;
     }
 
 }
