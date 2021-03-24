@@ -9,13 +9,13 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class ViewHolderAdapter extends RecyclerView.Adapter<ViewHolder> {
-    private final Fragment mFragment;
+    private final FragmentNoteList mFragment;
     private final LayoutInflater mInflater;
     private NotesSource mNoteSource;
 
     private FragmentNoteList.OnClickListener mOnClickListener;
 
-    public ViewHolderAdapter(Fragment fragment, NotesSource notesSource) {
+    public ViewHolderAdapter(FragmentNoteList fragment, NotesSource notesSource) {
         mFragment = fragment;
         mInflater = mFragment.getLayoutInflater();
         mNoteSource = notesSource;

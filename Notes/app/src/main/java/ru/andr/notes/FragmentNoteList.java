@@ -31,6 +31,7 @@ public class FragmentNoteList extends Fragment {
     private ViewHolderAdapter mViewHolderAdapter;
     private NotesSourceImpl mNoteSourceImpl;
     private RecyclerView mRecyclerView;
+    private int mLastSelectedItemNoteList = -1;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -69,7 +70,7 @@ public class FragmentNoteList extends Fragment {
         mRecyclerView.setLayoutManager(layoutManager);
 
         // Установим адаптер
-        mNoteSourceImpl = new NotesSourceImpl(getResources());
+        mNoteSourceImpl = NotesSourceImpl.getInstance(getResources()); //new NotesSourceImpl(getResources()); - переделали на синглтон !!!
         mViewHolderAdapter = new ViewHolderAdapter(this, mNoteSourceImpl);
         mRecyclerView.setAdapter(mViewHolderAdapter);
 
@@ -136,14 +137,15 @@ public class FragmentNoteList extends Fragment {
     @Override
     public boolean onContextItemSelected(@NonNull MenuItem item) {
 
-        if(item.getItemId() == R.id.action_edit_context_menu){
+        // Обработка выбора пункта меню приложения (активити)
+        int id = item.getItemId();
 
-        } else if(item.getItemId() == R.id.action_delete_context_menu){
-
-        }else{
+        if (FragmentNoteListItemSelected(id)) {
+            return true;
+        }
+        else {
             return super.onContextItemSelected(item);
         }
-        return true;
     }
 
     @Override
@@ -207,12 +209,33 @@ public class FragmentNoteList extends Fragment {
                 mNoteSourceImpl.clearAll();
                 mViewHolderAdapter.notifyDataSetChanged();
                 return true;
+            case  R.id.action_edit_context_menu:
+                if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+                    FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+                    FragmentTransaction transaction = fragmentManager.beginTransaction();
+                    transaction.replace(R.id.fragment_note_list_container, FragmentEditNoteList.newInstance(mNoteSourceImpl.getItemAt(mLastSelectedItemNoteList)));
+                    transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+                    transaction.addToBackStack(null);
+                    transaction.commit();
+                } else {
+                    //showToRight(note);
+                }
+                break;
+            case  R.id.action_delete_context_menu:
+                mNoteSourceImpl.remove(mLastSelectedItemNoteList);
+                //mViewHolderAdapter.notifyDataSetChanged();
+                mViewHolderAdapter.notifyItemRemoved(mLastSelectedItemNoteList);
+                break;
         }
         return false;
     }
 
     public interface OnClickListener {
         void onItemClick(View v, Note note);
+    }
+
+    void setLastSelectedItemNoteList(int current){
+        mLastSelectedItemNoteList = current;
     }
 
 

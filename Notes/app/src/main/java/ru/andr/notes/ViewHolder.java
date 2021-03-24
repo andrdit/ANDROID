@@ -2,6 +2,7 @@ package ru.andr.notes;
 
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
@@ -25,7 +26,7 @@ public class ViewHolder extends RecyclerView.ViewHolder {
         mIsFavoriteStatus = itemView.findViewById(R.id.item_list_is_favorite);
     }
 
-    public void populate(Fragment fragment, NotesSource noteSource, int position) {
+    public void populate(FragmentNoteList fragment, NotesSource noteSource, int position) {
 
         Note note = noteSource.getItemAt(position);
         mImageFavorite = noteSource.getImageFavoriteStatus();
@@ -36,14 +37,16 @@ public class ViewHolder extends RecyclerView.ViewHolder {
         else
             mIsFavoriteStatus.setImageResource(mImageFavorite[IS_FALSE]);
 
-//        itemView.setOnLongClickListener(v->{
-//            return false;
-//        });
-//
+        textName.setOnLongClickListener(v->{
+            fragment.setLastSelectedItemNoteList(getLayoutPosition());
+            return false;
+        });
+
         fragment.registerForContextMenu(textName);
     }
 
     public void clear(Fragment fragment){
+        textName.setOnLongClickListener(null);
         fragment.unregisterForContextMenu(textName);
     }
 }

@@ -11,5 +11,6 @@ public interface NotesSource {
     int getItemCount();
     @DrawableRes int[] getImageFavoriteStatus();
     void add(@NonNull Note note);
+    void remove(int position);
     void clearAll();
 }

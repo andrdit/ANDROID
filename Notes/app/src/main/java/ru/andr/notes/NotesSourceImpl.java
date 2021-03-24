@@ -12,10 +12,30 @@ import java.util.ArrayList;
 
 public class NotesSourceImpl implements NotesSource, Parcelable {
 
-    private ArrayList<Note> mNotes;
-    private @DrawableRes int[] mImageFavorite;
+    private static NotesSourceImpl sInstance; // дополнительное поле для создания сингтона
 
-    public NotesSourceImpl(Resources resources) {
+    private ArrayList<Note> mNotes;
+    private @DrawableRes
+    int[] mImageFavorite;
+
+    // идиома double check lock - пример создания синглтона на базе класса NoteSourceImpl
+    public static NotesSourceImpl getInstance(Resources resources) {
+
+        NotesSourceImpl instance = sInstance;
+        if (instance == null) {
+            synchronized (NotesSourceImpl.class) {
+                if (sInstance == null) {
+                    instance = new NotesSourceImpl(resources);
+                    sInstance = instance;
+                }
+            }
+        }
+
+        return instance;
+    }
+
+    // конструктор класса ставим в private, объект класса NoteSourceImpl получаем через getInstance(Resources resources)
+    private NotesSourceImpl(Resources resources) {
 
         int[] indexNote = resources.getIntArray(R.array.index_note);
         String[] nameNote = resources.getStringArray(R.array.name_note);
@@ -25,14 +45,14 @@ public class NotesSourceImpl implements NotesSource, Parcelable {
 
         mNotes = new ArrayList();
         for (int index : indexNote) {
-            Note note = new Note(index, nameNote[index], descriptionNote[index], createDateNote[index], isFavorite[index],false,false);
+            Note note = new Note(index, nameNote[index], descriptionNote[index], createDateNote[index], isFavorite[index], false, false);
             mNotes.add(note);
         }
 
         TypedArray imagesStatus = resources.obtainTypedArray(R.array.statusImageIsFavorite);
         mImageFavorite = new int[imagesStatus.length()];
         for (int i = 0; i < mImageFavorite.length; i++) {
-            mImageFavorite[i] = imagesStatus.getResourceId(i,-1);
+            mImageFavorite[i] = imagesStatus.getResourceId(i, -1);
         }
         imagesStatus.recycle();
     }
@@ -88,6 +108,11 @@ public class NotesSourceImpl implements NotesSource, Parcelable {
     @Override
     public void add(@NonNull Note note) {
         mNotes.add(note);
+    }
+
+    @Override
+    public void remove(int position) {
+        mNotes.remove(position);
     }
 
     @Override
