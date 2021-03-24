@@ -48,13 +48,13 @@ public class FragmentEditNoteList extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        TextView tvNameNote = view.findViewById(R.id.name_note);
-        TextView tvCreateDateNote = view.findViewById(R.id.createDate_note);
-        TextView tvDescriptionNote = view.findViewById(R.id.description_note);
-
-        tvNameNote.setText(mNote.getName());
-        tvCreateDateNote.setText(mNote.getDateCreate());
-        tvDescriptionNote.setText(mNote.getDescription());
+//        TextView tvNameNote = view.findViewById(R.id.name_note);
+//        TextView tvCreateDateNote = view.findViewById(R.id.createDate_note);
+//        TextView tvDescriptionNote = view.findViewById(R.id.description_note);
+//
+//        tvNameNote.setText(mNote.getName());
+//        tvCreateDateNote.setText(mNote.getDateCreate());
+//        tvDescriptionNote.setText(mNote.getDescription());
     }
 
     @Override
