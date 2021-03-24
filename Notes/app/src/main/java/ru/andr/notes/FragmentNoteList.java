@@ -199,8 +199,8 @@ public class FragmentNoteList extends Fragment {
                 int position = mNoteSourceImpl.getItemCount();
                 int indexForName = position + 1;
                 mNoteSourceImpl.add
-                        (new Note(position, "I am new, edit me!!! (Note " + indexForName + ")", "need edit",
-                                "undefined", 0, false, false));
+                        (new Note(position, "Note", "I am new, edit me!!! (Note " + indexForName + ")", "need edit",
+                                "undefined", "undefined", 0, false, false));
                 mViewHolderAdapter.notifyItemInserted(position);
                 mRecyclerView.scrollToPosition(position);
                 return true;

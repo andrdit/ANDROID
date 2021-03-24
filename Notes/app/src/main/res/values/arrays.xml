@@ -63,6 +63,27 @@
         <item>06.06.2021</item>
     </string-array>
 
+    <string-array name="createTime_note">
+        <item>00:00:00</item>
+        <item>00:00:00</item>
+        <item>00:00:00</item>
+        <item>00:00:00</item>
+        <item>00:00:00</item>
+        <item>00:00:00</item>
+        <item>00:00:00</item>
+        <item>00:00:00</item>
+        <item>00:00:00</item>
+        <item>00:00:00</item>
+        <item>00:00:00</item>
+        <item>00:00:00</item>
+        <item>00:00:00</item>
+        <item>00:00:00</item>
+        <item>00:00:00</item>
+        <item>00:00:00</item>
+        <item>00:00:00</item>
+        <item>00:00:00</item>
+    </string-array>
+
     <integer-array name="index_note">
         <item>0</item>
         <item>1</item>
@@ -109,4 +130,10 @@
         <item>@android:drawable/btn_star_big_off</item>
         <item>@android:drawable/btn_star_big_on</item>
     </integer-array>
+
+    <string-array name="task_list">
+        <item>Note</item>
+        <item>Do something</item>
+        <item>Dont forget !!!</item>
+    </string-array>
 </resources>

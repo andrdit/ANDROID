@@ -8,18 +8,22 @@ import androidx.annotation.DrawableRes;
 public class Note implements Parcelable {
 
     private int mIndex;
+    private String mTask;
     private String mName;
     private String mDescription;
     private String mDateCreate;
+    private String mTimeCreate;
     private boolean mIsFavorite;
     private boolean mIsCompleted;
     private boolean mIsCanceled;
 
-    public Note(int index, String name, String description, String dateCreate, int isFavorite, boolean isCompleted, boolean isCanceled ){
+    public Note(int index, String task, String name, String description, String dateCreate, String timeCreate, int isFavorite, boolean isCompleted, boolean isCanceled ){
         mIndex = index;
+        mTask = task;
         mName = name;
         mDescription = description;
         mDateCreate = dateCreate;
+        mTimeCreate = timeCreate;
         if(isFavorite == 1)
             mIsFavorite = true;
         mIsCompleted = isCompleted;
@@ -29,9 +33,11 @@ public class Note implements Parcelable {
 
     protected Note(Parcel in) {
         mIndex = in.readInt();
+        mTask = in.readString();
         mName = in.readString();
         mDescription = in.readString();
         mDateCreate = in.readString();
+        mTimeCreate = in.readString();
         mIsFavorite = in.readByte() != 0;
         mIsCompleted = in.readByte() != 0;
         mIsCanceled = in.readByte() != 0;
@@ -40,9 +46,11 @@ public class Note implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(mIndex);
+        dest.writeString(mTask);
         dest.writeString(mName);
         dest.writeString(mDescription);
         dest.writeString(mDateCreate);
+        dest.writeString(mTimeCreate);
         dest.writeByte((byte) (mIsFavorite ? 1 : 0));
         dest.writeByte((byte) (mIsCompleted ? 1 : 0));
         dest.writeByte((byte) (mIsCanceled ? 1 : 0));
@@ -71,6 +79,10 @@ public class Note implements Parcelable {
 
     public String getName() {
         return mName;
+    }
+
+    public String getTask() {
+        return mTask;
     }
 
     public String getDescription() {

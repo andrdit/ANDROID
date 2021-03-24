@@ -38,14 +38,16 @@ public class NotesSourceImpl implements NotesSource, Parcelable {
     private NotesSourceImpl(Resources resources) {
 
         int[] indexNote = resources.getIntArray(R.array.index_note);
+        String[] task = resources.getStringArray(R.array.task_list);
         String[] nameNote = resources.getStringArray(R.array.name_note);
         String[] descriptionNote = resources.getStringArray(R.array.description_note);
         String[] createDateNote = resources.getStringArray(R.array.createDate_note);
+        String[] createTimeNote = resources.getStringArray(R.array.createTime_note);
         int[] isFavorite = resources.getIntArray(R.array.is_favorite_note);
 
         mNotes = new ArrayList();
         for (int index : indexNote) {
-            Note note = new Note(index, nameNote[index], descriptionNote[index], createDateNote[index], isFavorite[index], false, false);
+            Note note = new Note(index, task[0], nameNote[index], descriptionNote[index], createDateNote[index],createTimeNote[index], isFavorite[index], false, false);
             mNotes.add(note);
         }
 

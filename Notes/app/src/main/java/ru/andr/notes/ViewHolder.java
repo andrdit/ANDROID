@@ -15,6 +15,7 @@ public class ViewHolder extends RecyclerView.ViewHolder {
     private final int IS_TRUE = 1;
     private final int IS_FALSE = 0;
 
+    public TextView textTask;
     public TextView textName;
     public AppCompatImageView mIsFavoriteStatus;
     private @DrawableRes
@@ -22,7 +23,8 @@ public class ViewHolder extends RecyclerView.ViewHolder {
 
     public ViewHolder(@NonNull View itemView) {
         super(itemView);
-        textName = itemView.findViewById(R.id.item_list_note);
+        textTask = itemView.findViewById(R.id.item_list_note_task);
+        textName = itemView.findViewById(R.id.item_list_note_name);
         mIsFavoriteStatus = itemView.findViewById(R.id.item_list_is_favorite);
     }
 
@@ -30,6 +32,7 @@ public class ViewHolder extends RecyclerView.ViewHolder {
 
         Note note = noteSource.getItemAt(position);
         mImageFavorite = noteSource.getImageFavoriteStatus();
+        textTask.setText(note.getTask());
         textName.setText(note.getName());
 
         if (note.isFavorite())
