@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="item_list_note">40sp</dimen>
+    <dimen name="name_note_list">30sp</dimen>
+    <dimen name="date_time_note_list">20sp</dimen>
 </resources>

@@ -5,10 +5,13 @@
     android:layout_height="wrap_content">
 
     <LinearLayout
+        android:id="@+id/item_list_note"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="horizontal"
         android:background="@drawable/item_list_note_background"
-        android:orientation="horizontal">
+        android:layout_margin="5dp"
+        android:elevation="5dp">
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/item_list_is_favorite"
@@ -23,22 +26,21 @@
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:background="@drawable/item_list_note_background"
             android:orientation="horizontal"
             android:layout_weight="7">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/item_list_note_background"
                 android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/item_list_note_task"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:layout_weight="1"
+                    android:layout_weight="1.5"
                     android:text="task"
+                    android:textAlignment="center"
                     android:textSize="@dimen/item_list_note" />
 
                 <TextView
@@ -47,11 +49,19 @@
                     android:layout_height="0dp"
                     android:layout_weight="1"
                     android:text="name"
-                    android:textSize="@dimen/item_list_note" />
+                    android:textSize="@dimen/name_note_list" />
+
+                <TextView
+                    android:id="@+id/item_list_note_short_description"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:text="short description"
+                    android:textSize="@dimen/date_time_note_list" />
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:background="@drawable/item_list_note_background"
                     android:orientation="horizontal"
                     android:layout_weight="1">
 
@@ -61,7 +71,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="date"
-                        android:textSize="@dimen/item_list_note" />
+                        android:textSize="@dimen/date_time_note_list" />
 
                     <TextView
                         android:id="@+id/item_list_note_time"
@@ -69,31 +79,30 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="time"
-                        android:textSize="@dimen/item_list_note" />
+                        android:textSize="@dimen/date_time_note_list" />
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:background="@drawable/item_list_note_background"
                     android:orientation="horizontal"
                     android:layout_weight="1">
 
-                    <
+                    <com.google.android.material.checkbox.MaterialCheckBox
                         android:id="@+id/item_list_note_completed"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text=""
-                        android:textSize="@dimen/item_list_note" />
+                        android:text="@string/completed"
+                        android:clickable="false"/>
 
-                    <TextView
-                        android:id="@+id/item_list_note_time"
+                    <com.google.android.material.switchmaterial.SwitchMaterial
+                        android:id="@+id/item_list_note_canceled"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="time"
-                        android:textSize="@dimen/item_list_note" />
+                        android:text="@string/canceled"
+                        android:clickable="false"/>
                 </LinearLayout>
 
             </LinearLayout>

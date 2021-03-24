@@ -17,5 +17,7 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="edit">Edit</string>
     <string name="delete">Delete</string>
+    <string name="canceled">Canceled</string>
+    <string name="completed">Completed</string>
 
 </resources>
