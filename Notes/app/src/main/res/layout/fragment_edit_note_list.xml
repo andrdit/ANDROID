@@ -32,9 +32,9 @@
                     android:id="@+id/item_list_note_task"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
+                    android:layout_margin="10dp"
                     android:layout_weight="10"
                     android:text="task"
-                    android:layout_margin="10dp"
                     android:textAlignment="center"
                     android:textSize="@dimen/item_list_note" />
 
@@ -48,13 +48,13 @@
             </LinearLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/item_list_note_name"
                 android:layout_width="match_parent"
                 android:layout_margin="5dp"
                 android:layout_height="0dp"
                 android:layout_weight="1">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/item_list_note_name"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:hint="name"

@@ -100,4 +100,16 @@ public class Note implements Parcelable {
     public void setIsFavorite(boolean isFavorite) {
         mIsFavorite = isFavorite;
     }
+
+    public String getTimeCreate() {
+        return mTimeCreate;
+    }
+
+    public boolean isCompleted() {
+        return mIsCompleted;
+    }
+
+    public boolean isCanceled() {
+        return mIsCanceled;
+    }
 }
