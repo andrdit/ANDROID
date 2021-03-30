@@ -10,7 +10,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatSpinner;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
@@ -20,7 +19,6 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -32,10 +30,11 @@ import java.util.Calendar;
 
 public class FragmentEditNoteList extends Fragment {
 
-    public static final String ARG_NOTE = "FragmentEditNoteList.note";
+    public static final String ARG_NOTE_EDIT = "FragmentEditNoteList.note";
     private Note mNote;
-    private View.OnClickListener onClickListener;
-    private static FragmentManager mFragmentManager;
+    private TextView mTvDateNote;
+    private TextView mTvTimeNote;
+    private boolean FIRST_LOAD = true;
 
     public FragmentEditNoteList() {
         // Required empty public constructor
@@ -43,9 +42,8 @@ public class FragmentEditNoteList extends Fragment {
 
     public static FragmentEditNoteList newInstance(Note note) {
         FragmentEditNoteList fragment = new FragmentEditNoteList();
-        mFragmentManager = fragment.getFragmentManager();
         Bundle args = new Bundle();
-        args.putParcelable(ARG_NOTE, note);
+        args.putParcelable(ARG_NOTE_EDIT, note);
         fragment.setArguments(args);
      //   fragment.setRetainInstance(true);
         return fragment;
@@ -55,7 +53,7 @@ public class FragmentEditNoteList extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mNote = getArguments().getParcelable(ARG_NOTE);
+            mNote = getArguments().getParcelable(ARG_NOTE_EDIT);
         }
     }
 
@@ -72,16 +70,16 @@ public class FragmentEditNoteList extends Fragment {
 
         TextView tvTaskNote = view.findViewById(R.id.item_list_note_task);
         TextInputEditText tietNameNote = view.findViewById(R.id.item_list_note_name);
-        TextView tvDateNote = view.findViewById(R.id.item_list_note_date);
-        TextView tvTimeNote = view.findViewById(R.id.item_list_note_time);
+        mTvDateNote = view.findViewById(R.id.item_list_note_date);
+        mTvTimeNote = view.findViewById(R.id.item_list_note_time);
         TextView tvDescriptionNote = view.findViewById(R.id.item_list_description);
         CheckBox checkBoxCompleted = view.findViewById(R.id.item_list_note_completed);
         SwitchMaterial switchCanceled = view.findViewById(R.id.item_list_note_canceled);
 
         tvTaskNote.setText(mNote.getTask());
         tietNameNote.setText(mNote.getName());
-        tvDateNote.setText(mNote.getDateCreate());
-        tvTimeNote.setText(mNote.getTimeCreate());
+        mTvDateNote.setText(mNote.getDateCreate());
+        mTvTimeNote.setText(mNote.getTimeCreate());
         tvDescriptionNote.setText(mNote.getDescription());
         checkBoxCompleted.setChecked(mNote.isCompleted());
         switchCanceled.setChecked(mNote.isCanceled());
@@ -89,17 +87,29 @@ public class FragmentEditNoteList extends Fragment {
         Button btnSave = view.findViewById(R.id.btn_save_note);
         AppCompatSpinner spinnerTask = view.findViewById(R.id.spinner_tasks);
 
-
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Toast.makeText(getContext(), "SAVE", Toast.LENGTH_SHORT).show();
+                mNote.setTask(tvTaskNote.getText().toString());
+                mNote.setName(tietNameNote.getText().toString());
+                mNote.setDateCreate(mTvDateNote.getText().toString());
+                mNote.setTimeCreate(mTvTimeNote.getText().toString());
+                mNote.setIsCanceled(switchCanceled.isChecked());
+                mNote.setIsCompleted(checkBoxCompleted.isChecked());
+                mNote.setDescription(tvDescriptionNote.getText().toString());
+
+                getFragmentManager().popBackStack();
             }
         });
 
         spinnerTask.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if(FIRST_LOAD){
+                    FIRST_LOAD = false;
+                    return;
+                }
                 tvTaskNote.setText(spinnerTask.getSelectedItem().toString());
             }
 
@@ -114,8 +124,16 @@ public class FragmentEditNoteList extends Fragment {
         btn_set_date.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DialogFragment newFragment = new DatePickerFragment();
-                newFragment.show(mFragmentManager, "datePicker");
+                DialogFragment newFragment = new DatePickerFragment(mTvDateNote);
+                newFragment.show(requireFragmentManager(), "datePicker");
+            }
+        });
+
+        btn_set_time.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DialogFragment newFragment = new TimePickerFragment(mTvTimeNote);
+                newFragment.show(requireFragmentManager(), "timePicker");
             }
         });
 
@@ -124,13 +142,19 @@ public class FragmentEditNoteList extends Fragment {
     @Override
     public void onSaveInstanceState(@NonNull Bundle bundle){
         super.onSaveInstanceState(bundle);
-
-        bundle.putParcelable(FragmentEditNoteList.ARG_NOTE, mNote);
+        bundle.putParcelable(FragmentEditNoteList.ARG_NOTE_EDIT, mNote);
     }
+
+
 
     public static class TimePickerFragment extends DialogFragment
             implements TimePickerDialog.OnTimeSetListener {
 
+        private TextView mTvTimeNoteTimePickerFragment;
+
+        public TimePickerFragment(TextView tvTimeNote){
+            mTvTimeNoteTimePickerFragment = tvTimeNote;
+        }
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             // Use the current time as the default values for the picker
@@ -144,17 +168,14 @@ public class FragmentEditNoteList extends Fragment {
         }
 
         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-            // Do something with the time chosen by the user
+            mTvTimeNoteTimePickerFragment.setText(hourOfDay + ":" + minute);
         }
     }
 
-//    public void showTimePickerDialog(View v) {
-//        DialogFragment newFragment = new TimePickerFragment();
-//        newFragment.show(getSupportFragmentManager(), "timePicker");
-//    }
-
     public static class DatePickerFragment extends DialogFragment
             implements DatePickerDialog.OnDateSetListener {
+
+        private TextView mTvDateNoteDatePickerFragment;
 
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -168,8 +189,12 @@ public class FragmentEditNoteList extends Fragment {
             return new DatePickerDialog(getActivity(), this, year, month, day);
         }
 
+        public DatePickerFragment(TextView tvDateNote){
+            mTvDateNoteDatePickerFragment = tvDateNote;
+        }
+
         public void onDateSet(DatePicker view, int year, int month, int day) {
-            // Do something with the date chosen by the user
+            mTvDateNoteDatePickerFragment.setText(day + "." + month + "." + year);
         }
     }
 

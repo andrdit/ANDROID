@@ -112,4 +112,37 @@ public class Note implements Parcelable {
     public boolean isCanceled() {
         return mIsCanceled;
     }
+
+    public void setIndex(int index) {
+        mIndex = index;
+    }
+
+    public void setTask(String task) {
+        mTask = task;
+    }
+
+    public void setName(String name) {
+        mName = name;
+    }
+
+    public void setDescription(String description) {
+        mDescription = description;
+    }
+
+    public void setDateCreate(String dateCreate) {
+        mDateCreate = dateCreate;
+    }
+
+    public void setTimeCreate(String timeCreate) {
+        mTimeCreate = timeCreate;
+    }
+
+
+    public void setIsCompleted(boolean isCompleted) {
+        mIsCompleted = isCompleted;
+    }
+
+    public void setIsCanceled(boolean isCanceled) {
+        mIsCanceled = isCanceled;
+    }
 }
