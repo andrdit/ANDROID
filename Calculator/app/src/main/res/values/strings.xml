@@ -19,4 +19,6 @@
     <string name="textBtnMinus">-</string>
     <string name="textBtnPlus">+</string>
     <string name="textBtnEquel">=</string>
+    <string name="textOnSwitch">Вкл/выкл темную тему</string>
+    <string name="text_settingsButton">Настройки</string>
 </resources>

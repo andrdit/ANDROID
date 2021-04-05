@@ -1,36 +1,19 @@
 package ru.andr.calculator;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
-import android.widget.Button;
+import android.view.View;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Stack;
 
 public class MainActivity extends AppCompatActivity {
-
-    private Button mBtn0;
-    private Button mBtn1;
-    private Button mBtn2;
-    private Button mBtn3;
-    private Button mBtn4;
-    private Button mBtn5;
-    private Button mBtn6;
-    private Button mBtn7;
-    private Button mBtn8;
-    private Button mBtn9;
-    private Button mBtnClear;
-    private Button mBtnBackSpace;
-    private Button mBtnProcents;
-    private Button mBtnDivide;
-    private Button mBtnMultiply;
-    private Button mBtnMinus;
-    private Button mBtnPlus;
-    private Button mBtnEquel;
-    private Button mBtnPt;
 
     private TextView mTextViewResult;
     private TextView mTextViewExample;
@@ -39,10 +22,17 @@ public class MainActivity extends AppCompatActivity {
     private StringBuilder mExample;
     private ArrayList<String> mExampleArrayList;
 
+    private boolean mIsNightMode;
+    View.OnClickListener buttonsListener;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.key_board_layout);
+
+        mIsNightMode = getIsNightMode();
+
+        onOffNightMode(mIsNightMode);
 
         mCurrentTextResult = new StringBuilder();
         mCurrentTextResult.append("");
@@ -57,238 +47,262 @@ public class MainActivity extends AppCompatActivity {
 
     private void init() {
 
-        mBtn0 = (Button) findViewById(R.id.button0);
-        mBtn1 = (Button) findViewById(R.id.button1);
-        mBtn2 = (Button) findViewById(R.id.button2);
-        mBtn3 = (Button) findViewById(R.id.button3);
-        mBtn4 = (Button) findViewById(R.id.button4);
-        mBtn5 = (Button) findViewById(R.id.button5);
-        mBtn6 = (Button) findViewById(R.id.button6);
-        mBtn7 = (Button) findViewById(R.id.button7);
-        mBtn8 = (Button) findViewById(R.id.button8);
-        mBtn9 = (Button) findViewById(R.id.button9);
-        mBtnClear = (Button) findViewById(R.id.buttonClear);
-        mBtnBackSpace = (Button) findViewById(R.id.buttonBackSpace);
-        mBtnProcents = (Button) findViewById(R.id.buttonProcents);
-        mBtnDivide = (Button) findViewById(R.id.buttonDivide);
-        mBtnMultiply = (Button) findViewById(R.id.buttonMultiply);
-        mBtnMinus = (Button) findViewById(R.id.buttonMinus);
-        mBtnPlus = (Button) findViewById(R.id.buttonPlus);
-        mBtnEquel = (Button) findViewById(R.id.buttonEquel);
-        mBtnPt = (Button) findViewById(R.id.buttonPt);
+        mTextViewResult = findViewById(R.id.textViewResult);
+        mTextViewExample = findViewById(R.id.textViewExample);
 
-        mTextViewResult = (TextView) findViewById(R.id.textViewResult);
-        mTextViewExample = (TextView) findViewById(R.id.textViewExample);
-
-        mBtnClear.setOnClickListener(view -> {
-            mCurrentTextResult.setLength(0);
-            mCurrentTextResult.append("");
-            mTextViewResult.setText("");
-
-            mExample.setLength(0);
-            mExample.append("");
-            mTextViewExample.setText("");
-
-            mExampleArrayList.clear();
-        });
-
-        mBtn0.setOnClickListener(view -> {
-            if (mCurrentTextResult.length() == 0) {
-                return;
-            }
-
-            mCurrentTextResult.append("0");
-            mTextViewResult.setText(mCurrentTextResult.toString());
-        });
-
-        mBtn1.setOnClickListener(view -> {
-            mCurrentTextResult.append("1");
-            mTextViewResult.setText(mCurrentTextResult.toString());
-        });
-
-        mBtn2.setOnClickListener(view -> {
-            mCurrentTextResult.append("2");
-            ;
-            mTextViewResult.setText(mCurrentTextResult.toString());
-        });
-
-        mBtn3.setOnClickListener(view -> {
-            mCurrentTextResult.append("3");
-            mTextViewResult.setText(mCurrentTextResult.toString());
-        });
-
-        mBtn4.setOnClickListener(view -> {
-            mCurrentTextResult.append("4");
-            mTextViewResult.setText(mCurrentTextResult.toString());
-        });
-
-        mBtn5.setOnClickListener(view -> {
-            mCurrentTextResult.append("5");
-            mTextViewResult.setText(mCurrentTextResult.toString());
-        });
-
-        mBtn6.setOnClickListener(view -> {
-            mCurrentTextResult.append("6");
-            mTextViewResult.setText(mCurrentTextResult.toString());
-        });
-
-        mBtn7.setOnClickListener(view -> {
-            mCurrentTextResult.append("7");
-            mTextViewResult.setText(mCurrentTextResult.toString());
-        });
-
-        mBtn8.setOnClickListener(view -> {
-            mCurrentTextResult.append("8");
-            mTextViewResult.setText(mCurrentTextResult.toString());
-        });
-
-        mBtn9.setOnClickListener(view -> {
-            mCurrentTextResult.append("9");
-            mTextViewResult.setText(mCurrentTextResult.toString());
-        });
-
-        mBtnBackSpace.setOnClickListener(view -> {
-            if (mCurrentTextResult.length() == 0)
-                return;
-            mCurrentTextResult.deleteCharAt(mCurrentTextResult.length() - 1);
-            mTextViewResult.setText(mCurrentTextResult.toString());
-        });
-
-        mBtnPt.setOnClickListener(view -> {
-
-            if (mCurrentTextResult.toString().contains("."))
-                return;
-            if (mCurrentTextResult.length() == 0) {
-                mCurrentTextResult.append("0");
-            }
-
-            if (isLastSymbolOperand())
-                return;
-
-            mCurrentTextResult.append(".");
-            mTextViewResult.setText(mCurrentTextResult.toString());
-        });
-
-        mBtnProcents.setOnClickListener(view -> {
-            if (mCurrentTextResult.length() == 0)
-                return;
-
-            if (isLastSymbolOperand())
-                return;
-
-            setTextExamle("/");
-
-        });
-
-        mBtnDivide.setOnClickListener(view -> {
-            if (mCurrentTextResult.length() == 0)
-                return;
-
-            if (isLastSymbolOperand())
-                return;
-
-            setTextExamle("/");
-        });
-
-        mBtnMultiply.setOnClickListener(view -> {
-            if (mCurrentTextResult.length() == 0)
-                return;
-
-            if (isLastSymbolOperand())
-                return;
-
-            setTextExamle("*");
-
-        });
-
-        mBtnMinus.setOnClickListener(view -> {
-            if (mCurrentTextResult.length() == 0)
-                return;
-
-            if (isLastSymbolOperand())
-                return;
-
-            setTextExamle("-");
-
-        });
-
-        mBtnPlus.setOnClickListener(view -> {
-            if (mCurrentTextResult.length() == 0)
-                return;
-
-            if (isLastSymbolOperand())
-                return;
-
-            setTextExamle("+");
-
-        });
-
-        mBtnEquel.setOnClickListener(view -> {
-            if (mCurrentTextResult.length() == 0)
-                return;
-
-            if (isLastSymbolOperand())
-                return;
-
-            setTextExamle("");
-
-            // get postfix string
-            CustomStack customStack = new CustomStack(mExampleArrayList.size());
-
-            String postfixString = infixToPostfix(customStack);
-            mTextViewResult.setText(postfixString);
-
-            //get result
-            String[] operandWithOperators = postfixString.split(";");
-
-            mTextViewResult.setText(postfixString);
-
-            Stack<String> resultStack = new Stack<>();
-
-            String element;
-            String operand1;
-            String operand2;
-            String answer = "";
-
-            float num1;
-            float num2;
-
-            for (int i = 0; i < operandWithOperators.length; i++) {
-
-                element = operandWithOperators[i];
-
-                if (!element.equals("%") && !element.equals("/") && !element.equals("*") && !element.equals("-") && !element.equals("+")) {
-                    resultStack.push(element);
-                } else // Если это оператор
-                {
-                    operand2 = resultStack.pop(); // Извлечение операндов
-                    operand1 = resultStack.pop();
-
-                    switch (element) // Выполнение арифметической
-                    { // операции
-                        case "+":
-                            answer = getSum(operand1, operand2);
-                            break;
-                        case "-":
-                            answer = getMinus(operand1, operand2);
-                            break;
-                        case "*":
-                            answer = getMultiply(operand1, operand2);
-                            break;
-                        case "/":
-                            answer = getDivide(operand1, operand2);
-                            break;
-                        default:
-                             answer = "0";
+        buttonsListener = (View v) -> {
+            switch (v.getId()) {
+                case R.id.button0: {
+                    if (mCurrentTextResult.length() == 0) {
+                        return;
                     }
-                       resultStack.push(answer); // Занесение промежуточного
+                    if (mCurrentTextResult.length() == 1 && mCurrentTextResult.toString().contains("0")) {
+                        return;
+                    }
+
+                    if(isLastSymbolSignEquel()){
+                        pressedPoint();
+                        return;
+                    }
+                    mCurrentTextResult.append("0");
+                    mTextViewResult.setText(mCurrentTextResult.toString());
+                    break;
+                }
+                case R.id.button1: {
+                    pressedNumber("1");
+                    break;
+                }
+                case R.id.button2: {
+                    pressedNumber("2");
+                    break;
+                }
+                case R.id.button3: {
+                    pressedNumber("3");
+                    break;
+                }
+                case R.id.button4: {
+                    pressedNumber("4");
+                    break;
+                }
+                case R.id.button5: {
+                    pressedNumber("5");
+                    break;
+                }
+                case R.id.button6: {
+                    pressedNumber("6");
+                    break;
+                }
+                case R.id.button7: {
+                    pressedNumber("7");
+                    break;
+                }
+                case R.id.button8: {
+                    pressedNumber("8");
+                    break;
+                }
+                case R.id.button9: {
+                    pressedNumber("9");
+                    break;
+                }
+                case R.id.buttonBackSpace: {
+                    if (mCurrentTextResult.length() == 0) {
+                        return;
+                    }
+                    mCurrentTextResult.deleteCharAt(mCurrentTextResult.length() - 1);
+                    mTextViewResult.setText(mCurrentTextResult.toString());
+                    break;
+                }
+                case R.id.buttonPt: {
+                    pressedPoint();
+                    break;
+                }
+                case R.id.buttonDivide: {
+                    pressedOperator("/");
+                    break;
+                }
+                case R.id.buttonMultiply: {
+                    pressedOperator("*");
+                    break;
+                }
+                case R.id.buttonMinus: {
+                    pressedOperator("-");
+                    break;
+                }
+                case R.id.buttonPlus: {
+                    pressedOperator("+");
+                    break;
+                }
+                case R.id.buttonEquel: {
+                    if (mCurrentTextResult.length() == 0) {
+                        return;
+                    }
+
+                    if (isLastSymbolOperand() || isLastSymbolSignEquel()) {
+                        return;
+                    }
+
+                    setTextExamle("");
+
+                    // get postfix string
+                    CustomStack customStack = new CustomStack(mExampleArrayList.size());
+
+                    String postfixString = infixToPostfix(customStack);
+                    mTextViewResult.setText(postfixString);
+
+                    //get result
+                    String[] operandWithOperators = postfixString.split(";");
+
+                    mTextViewResult.setText(postfixString);
+
+                    Stack<String> resultStack = new Stack<>();
+
+                    String element;
+                    String operand1;
+                    String operand2;
+                    String answer = "";
+
+                    for (int i = 0; i < operandWithOperators.length; i++) {
+
+                        element = operandWithOperators[i];
+
+                        if (!element.equals("%") && !element.equals("/") && !element.equals("*") && !element.equals("-") && !element.equals("+")) {
+                            resultStack.push(element);
+                        } else // Если это оператор
+                        {
+                            operand2 = resultStack.pop(); // Извлечение операндов
+                            operand1 = resultStack.pop();
+
+                            switch (element) // Выполнение арифметической
+                            { // операции
+                                case "+":
+                                    answer = getSum(operand1, operand2);
+                                    break;
+                                case "-":
+                                    answer = getMinus(operand1, operand2);
+                                    break;
+                                case "*":
+                                    answer = getMultiply(operand1, operand2);
+                                    break;
+                                case "/":
+                                    answer = getDivide(operand1, operand2);
+                                    break;
+                                default:
+                                    answer = "0";
+                            }
+                            resultStack.push(answer); // Занесение промежуточного
+                        }
+                    }
+                    answer = resultStack.pop();
+                    mTextViewResult.setText(answer);
+                    mExample.append("=");
+                    mTextViewExample.setText(mExample.toString());
+                    mCurrentTextResult.append(answer);
+                    break;
+                }
+                case R.id.buttonClear: {
+                    prepareForNewCalculation();
+                    break;
+                }
+                case R.id.btnSettings: {
+                    Intent intent = new Intent(this, SettingsActivity.class);
+                    startActivity(intent);
+                    break;
+                }
+
+                default: {
+                    break;
                 }
             }
-               answer = resultStack.pop();
-               mTextViewResult.setText(answer);
+        };
 
-        });
+        findViewById(R.id.button0).setOnClickListener(buttonsListener);
+        findViewById(R.id.button1).setOnClickListener(buttonsListener);
+        findViewById(R.id.button2).setOnClickListener(buttonsListener);
+        findViewById(R.id.button3).setOnClickListener(buttonsListener);
+        findViewById(R.id.button4).setOnClickListener(buttonsListener);
+        findViewById(R.id.button5).setOnClickListener(buttonsListener);
+        findViewById(R.id.button6).setOnClickListener(buttonsListener);
+        findViewById(R.id.button7).setOnClickListener(buttonsListener);
+        findViewById(R.id.button8).setOnClickListener(buttonsListener);
+        findViewById(R.id.button9).setOnClickListener(buttonsListener);
+        findViewById(R.id.buttonClear).setOnClickListener(buttonsListener);
+        findViewById(R.id.buttonBackSpace).setOnClickListener(buttonsListener);
+        findViewById(R.id.buttonDivide).setOnClickListener(buttonsListener);
+        findViewById(R.id.buttonMultiply).setOnClickListener(buttonsListener);
+        findViewById(R.id.buttonMinus).setOnClickListener(buttonsListener);
+        findViewById(R.id.buttonPlus).setOnClickListener(buttonsListener);
+        findViewById(R.id.buttonEquel).setOnClickListener(buttonsListener);
+        findViewById(R.id.buttonPt).setOnClickListener(buttonsListener);
+        findViewById(R.id.btnSettings).setOnClickListener(buttonsListener);
 
+    }
+
+    private void pressedPoint() {
+        if(isLastSymbolSignEquel()){
+            prepareForNewCalculation();
+        }
+
+        if (mCurrentTextResult.toString().contains(".")) {
+            return;
+        }
+
+        if (mCurrentTextResult.length() == 0) {
+            mCurrentTextResult.append("0");
+        }
+
+        if (isLastSymbolOperand()) {
+            return;
+        }
+
+        mCurrentTextResult.append(".");
+        mTextViewResult.setText(mCurrentTextResult.toString());
+    }
+
+    private void pressedOperator(String operator) {
+        if (mCurrentTextResult.length() == 0) {
+            return;
+        }
+
+        if (isLastSymbolOperand()) {
+            return;
+        }
+
+        if(isLastSymbolSignEquel()){
+            continueCalculation();
+            mExample.append(operator);
+            mExampleArrayList.add(operator);
+            return;
+        }
+
+        setTextExamle(operator);
+    }
+
+    private void pressedNumber(String number) {
+        if(isLastSymbolSignEquel()){
+            prepareForNewCalculation();
+        }
+        mCurrentTextResult.append(number);
+        mTextViewResult.setText(mCurrentTextResult.toString());
+    }
+
+    private void prepareForNewCalculation() {
+        mExample.setLength(0);
+        mExample.append("");
+        mCurrentTextResult.setLength(0);
+        mCurrentTextResult.append("");
+        mExampleArrayList.clear();
+        mTextViewExample.setText("");
+        mTextViewResult.setText("");
+    }
+
+    private void continueCalculation() {
+        mExample.setLength(0);
+        mExample.append(mCurrentTextResult.toString());
+        mCurrentTextResult.setLength(0);
+        mCurrentTextResult.append("");
+        mExampleArrayList.clear();
+        mExampleArrayList.add(mExample.toString());
+        mTextViewExample.setText(mExample.toString());
     }
 
     private void setTextExamle(String operand) {
@@ -296,8 +310,8 @@ public class MainActivity extends AppCompatActivity {
         mExample.append(operand);
 
         mExampleArrayList.add(mCurrentTextResult.toString());
-        if(!operand.equals(""))
-        mExampleArrayList.add(operand);
+        if (!operand.equals(""))
+            mExampleArrayList.add(operand);
 
         mTextViewExample.setText(mExample.toString());
         mCurrentTextResult.setLength(0);
@@ -308,6 +322,16 @@ public class MainActivity extends AppCompatActivity {
     private boolean isLastSymbolOperand() {
         char lastSymbol = mCurrentTextResult.charAt(mCurrentTextResult.length() - 1);
         if (lastSymbol == '%' || lastSymbol == '.' || lastSymbol == '/' || lastSymbol == '*' || lastSymbol == '-' || lastSymbol == '+')
+            return true;
+        return false;
+    }
+
+    private boolean isLastSymbolSignEquel() {
+        if(mExample.length() == 0){
+            return false;
+        }
+        char lastSymbol = mExample.charAt(mExample.length() - 1);
+        if (lastSymbol == '=')
             return true;
         return false;
     }
@@ -352,10 +376,7 @@ public class MainActivity extends AppCompatActivity {
 
         while (!customStack.isEmpty()) // Извлечение оставшихся операторов
         {
-          //  String as = customStack.pop();
-
             sbString.append(customStack.pop() + ";"); // Записать в выходную строку
-          //  sbString.append(";"); // Записать в выходную строку
         }
 
         return sbString.toString(); // Возвращение постфиксного выражения
@@ -379,18 +400,10 @@ public class MainActivity extends AppCompatActivity {
         customStack.push(opThis); // Занесение в стек нового оператора
     }
 
-    private Object parseToNumber(String num) {
-        if (num.contains(".")) {
-            return Float.parseFloat(num);
-        } else {
-            return Integer.parseInt(num);
-        }
-    }
-
     private String getSum(String num1, String num2) {
         if (!num1.contains(".") && !num2.contains(".")) {
             return Integer.toString(Integer.parseInt(num1) + Integer.parseInt(num2));
-        }else{
+        } else {
             return Float.toString(Float.parseFloat(num1) + Float.parseFloat(num2));
         }
     }
@@ -398,7 +411,7 @@ public class MainActivity extends AppCompatActivity {
     private String getMinus(String num1, String num2) {
         if (!num1.contains(".") && !num2.contains(".")) {
             return Integer.toString(Integer.parseInt(num1) - Integer.parseInt(num2));
-        }else{
+        } else {
             return Float.toString(Float.parseFloat(num1) - Float.parseFloat(num2));
         }
     }
@@ -406,16 +419,50 @@ public class MainActivity extends AppCompatActivity {
     private String getMultiply(String num1, String num2) {
         if (!num1.contains(".") && !num2.contains(".")) {
             return Integer.toString(Integer.parseInt(num1) * Integer.parseInt(num2));
-        }else{
+        } else {
             return Float.toString(Float.parseFloat(num1) * Float.parseFloat(num2));
         }
     }
 
     private String getDivide(String num1, String num2) {
-//        if (!num1.contains(".") && !num2.contains(".")) {
-//            return Integer.toString(Integer.parseInt(num1) / Integer.parseInt(num2));
-//        }else{
-            return Float.toString(Float.parseFloat(num1) / Float.parseFloat(num2));
-//        }
+        return Float.toString(Float.parseFloat(num1) / Float.parseFloat(num2));
+    }
+
+    private boolean getIsNightMode() {
+        // Работаем через специальный класс сохранения и чтения настроек
+        SharedPreferences sharedPref = getSharedPreferences(CommonPreferences.NameSharedPreference, MODE_PRIVATE);
+
+        return sharedPref.getBoolean(CommonPreferences.KEY_DAY_NIGHT_MODE, false);
+    }
+
+    private void onOffNightMode(boolean isNightMode) {
+
+        if (isNightMode) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        } else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        }
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle instanceState) {
+        super.onSaveInstanceState(instanceState);
+
+        instanceState.putString(CommonPreferences.KEY_CURRENT_STATE_TEXT_VIEW_RESULT, mTextViewResult.getText().toString());
+        instanceState.putString(CommonPreferences.KEY_CURRENT_STATE_TEXT_VIEW_EXAMPLE, mTextViewExample.getText().toString());
+        instanceState.putString(CommonPreferences.KEY_mCurrentTextResult, mCurrentTextResult.toString());
+        instanceState.putString(CommonPreferences.KEY_mExample, mExample.toString());
+        instanceState.putSerializable(CommonPreferences.KEY_mExampleArrayList, mExampleArrayList);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+
+        mTextViewResult.setText(savedInstanceState.getString(CommonPreferences.KEY_CURRENT_STATE_TEXT_VIEW_RESULT));
+        mTextViewExample.setText(savedInstanceState.getString(CommonPreferences.KEY_CURRENT_STATE_TEXT_VIEW_EXAMPLE));
+        mCurrentTextResult.append(savedInstanceState.getString(CommonPreferences.KEY_mCurrentTextResult));
+        mExample.append(savedInstanceState.getString(CommonPreferences.KEY_mExample));
+        mExampleArrayList = (ArrayList<String>) savedInstanceState.getSerializable(CommonPreferences.KEY_mExampleArrayList);
     }
 }
