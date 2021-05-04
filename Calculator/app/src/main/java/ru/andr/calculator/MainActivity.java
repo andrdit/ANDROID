@@ -1,11 +1,14 @@
 package ru.andr.calculator;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
+
+import com.google.android.material.switchmaterial.SwitchMaterial;
 
 import java.util.ArrayList;
 import java.util.Stack;
@@ -39,11 +42,36 @@ public class MainActivity extends AppCompatActivity {
     private StringBuilder mExample;
     private ArrayList<String> mExampleArrayList;
 
+    private static final String DAY_NIGHT_MODE = "Night mode";
+    // Имя настроек
+    private static final String NameSharedPreference = "SETTINGS";
+    private boolean mIsNightMode;
+    private SwitchMaterial mSwitchOnOffNightMode;
+
+    //  private ActionBar mActionBar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.key_board_layout);
 
+       //onOffNightMode(getIsNightMode());
+
+        ///////  оставил для дальнейшей работы
+//        mSwitchOnOffNightMode = findViewById(R.id.mSwitch);
+//        mSwitchOnOffNightMode.setOnCheckedChangeListener((view) -> {
+//            mIsNightMode = !mIsNightMode;
+//            saveDayNightMode(mIsNightMode);
+//            onOffNightMode(getIsNightMode());
+//        });
+//
+//        Button btn = findViewById(R.id.buttonMode);
+//        btn.setOnClickListener((view) -> {
+//            mIsNightMode = !mIsNightMode;
+//            saveDayNightMode(mIsNightMode);
+//            onOffNightMode(getIsNightMode());
+//        });
+        ///////
         mCurrentTextResult = new StringBuilder();
         mCurrentTextResult.append("");
 
@@ -279,13 +307,13 @@ public class MainActivity extends AppCompatActivity {
                             answer = getDivide(operand1, operand2);
                             break;
                         default:
-                             answer = "0";
+                            answer = "0";
                     }
-                       resultStack.push(answer); // Занесение промежуточного
+                    resultStack.push(answer); // Занесение промежуточного
                 }
             }
-               answer = resultStack.pop();
-               mTextViewResult.setText(answer);
+            answer = resultStack.pop();
+            mTextViewResult.setText(answer);
 
         });
 
@@ -296,8 +324,8 @@ public class MainActivity extends AppCompatActivity {
         mExample.append(operand);
 
         mExampleArrayList.add(mCurrentTextResult.toString());
-        if(!operand.equals(""))
-        mExampleArrayList.add(operand);
+        if (!operand.equals(""))
+            mExampleArrayList.add(operand);
 
         mTextViewExample.setText(mExample.toString());
         mCurrentTextResult.setLength(0);
@@ -352,10 +380,10 @@ public class MainActivity extends AppCompatActivity {
 
         while (!customStack.isEmpty()) // Извлечение оставшихся операторов
         {
-          //  String as = customStack.pop();
+            //  String as = customStack.pop();
 
             sbString.append(customStack.pop() + ";"); // Записать в выходную строку
-          //  sbString.append(";"); // Записать в выходную строку
+            //  sbString.append(";"); // Записать в выходную строку
         }
 
         return sbString.toString(); // Возвращение постфиксного выражения
@@ -390,7 +418,7 @@ public class MainActivity extends AppCompatActivity {
     private String getSum(String num1, String num2) {
         if (!num1.contains(".") && !num2.contains(".")) {
             return Integer.toString(Integer.parseInt(num1) + Integer.parseInt(num2));
-        }else{
+        } else {
             return Float.toString(Float.parseFloat(num1) + Float.parseFloat(num2));
         }
     }
@@ -398,7 +426,7 @@ public class MainActivity extends AppCompatActivity {
     private String getMinus(String num1, String num2) {
         if (!num1.contains(".") && !num2.contains(".")) {
             return Integer.toString(Integer.parseInt(num1) - Integer.parseInt(num2));
-        }else{
+        } else {
             return Float.toString(Float.parseFloat(num1) - Float.parseFloat(num2));
         }
     }
@@ -406,7 +434,7 @@ public class MainActivity extends AppCompatActivity {
     private String getMultiply(String num1, String num2) {
         if (!num1.contains(".") && !num2.contains(".")) {
             return Integer.toString(Integer.parseInt(num1) * Integer.parseInt(num2));
-        }else{
+        } else {
             return Float.toString(Float.parseFloat(num1) * Float.parseFloat(num2));
         }
     }
@@ -415,7 +443,42 @@ public class MainActivity extends AppCompatActivity {
 //        if (!num1.contains(".") && !num2.contains(".")) {
 //            return Integer.toString(Integer.parseInt(num1) / Integer.parseInt(num2));
 //        }else{
-            return Float.toString(Float.parseFloat(num1) / Float.parseFloat(num2));
+        return Float.toString(Float.parseFloat(num1) / Float.parseFloat(num2));
 //        }
     }
+
+    // Сохранение настроек
+    private void saveDayNightMode(boolean isNightMode) {
+        SharedPreferences sharedPref = getSharedPreferences(NameSharedPreference, MODE_PRIVATE);
+        // Настройки сохраняются посредством специального класса editor.
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putBoolean(DAY_NIGHT_MODE, isNightMode);
+        editor.apply();
+    }
+
+    private boolean getIsNightMode() {
+        // Работаем через специальный класс сохранения и чтения настроек
+        SharedPreferences sharedPref = getSharedPreferences(NameSharedPreference, MODE_PRIVATE);
+
+        return sharedPref.getBoolean(DAY_NIGHT_MODE, false);
+    }
+
+    private void onOffNightMode(boolean isNightMode) {
+
+        if (isNightMode) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+            mIsNightMode = false;
+        } else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+            mIsNightMode = true;
+        }
+        if(isNightMode != mIsNightMode)
+        recreate();
+    }
+
+//    @Override
+//    protected void onStop() {
+//        super.onStop();
+//        setDayNightMode();
+//    }
 }
