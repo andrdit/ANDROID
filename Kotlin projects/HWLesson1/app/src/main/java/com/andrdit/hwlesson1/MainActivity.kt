@@ -7,6 +7,37 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 
+fun main() {
+
+    val person1 = Person()
+    val person2 = Person("Фредон", "Петрович")
+    val person3 = Person("Андрей", "Дитковский")
+
+    val personList = listOf(person1, person2, person3)
+
+    println("Вывод содержимого с помощью цикла for")
+    for (person in personList){
+        println(person.name + " " + person.soname)
+    }
+
+    println()
+
+    println("Вывод содержимого с помощью цикла while")
+    var i : Int = 0
+    while (i != personList.size){
+        println(personList[i].name + " " + personList[i].soname)
+        i++
+    }
+
+    println()
+
+    println("Вывод содержимого из Object")
+    val personListObj : List<Person> = Repository.getPersonList()
+    for (person in personListObj){
+        println(person.name + " " + person.soname)
+    }
+}
+
 class MainActivity : AppCompatActivity() {
 
     lateinit var etName: EditText
